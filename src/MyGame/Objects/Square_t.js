@@ -13,8 +13,8 @@
 
 function Squaret(spriteTexture, atX, atY, size1,size2) {
         
-    
-     this.mSquare = new SpriteRenderable(spriteTexture);
+    this.isfinal=1;
+    this.mSquare = new SpriteRenderable(spriteTexture);
     this.mSquare.setColor([1, 1, 1, 0]);
     this.mSquare.getXform().setPosition(atX,atY);
     this.mSquare.getXform().setSize(size1,size2);
@@ -45,10 +45,30 @@ Squaret.prototype.update = function () {
  
 
     var xpos = this.getXform().getXPos();
-    if(xpos>58)
-        this.setSpeed(-0.05);
-    if(xpos<45)
-        this.setSpeed(0.05);
+    
+    if(this.isfinal===1){
+        if(xpos>58)
+            this.setSpeed(-0.05);
+        if(xpos<45)
+            this.setSpeed(0.05);
+    }
+    if(this.isfinal===2){
+        
+        if(xpos>58)
+            this.setSpeed(-0.1);
+        if(xpos<30)
+            this.setSpeed(0.1);
+    }
+    if(this.isfinal===3){
+        
+        //this.setSpeed(-0.13);
+        if(xpos<3)
+            this.setSpeed(0.13);
+        if(xpos>97)
+            this.setSpeed(-0.13);
+        
+    }
+
     
     
     GameObject.prototype.update.call(this);

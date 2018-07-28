@@ -12,7 +12,8 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function Hero2(spriteTexture) {
-        
+      
+    this.isfake=0;
    this.mode=1;  
     this.mHero = new SpriteRenderable(spriteTexture);
     this.mHero.setColor([1, 1, 1, 0]);  // tints red
@@ -247,12 +248,14 @@ Hero2.prototype.update = function () {
             xform.setXPos(1);
         }
     
-    
-    if(xpos<=95 && xpos>=94&&ypos>29) {
+    if(!this.isfake)
+    {   
+    if(xpos<=95 && xpos>=94&&ypos>29 && ypos<29.5) {
         this.sta=1;
         gEngine.GameLoop.stop();      
         
     }
+}
     
     GameObject.prototype.update.call(this);
     

@@ -132,9 +132,8 @@ Level3.prototype.initialize = function () {
             // sets the background to gray
     gEngine.DefaultResources.setGlobalAmbientIntensity(3);
       
-    this.mAllObjs = new GameObjectSet();
     this.mNonRigid = new GameObjectSet();
-    
+    this.mAllObjs = new GameObjectSet();
     
     //this.createBounds();    
     
@@ -217,8 +216,10 @@ Level3.prototype.draw = function () {
         this.mCollisionInfos[i].draw(this.mCamera); */
     this.mCollisionInfos = []; 
     
-    this.mNonRigid.draw(this.mCamera);
+    this.mNonRigid.draw(this.mCamera);    
     this.mAllObjs.draw(this.mCamera);
+    this.mPlayagain.draw(this.mCamera);
+    this.mlevel1pic.draw(this.mCamera);
     
     this.mMsg.draw(this.mCamera);
     this.mMsg2.draw(this.mCamera);// only draw status in the main camera
@@ -243,11 +244,12 @@ Level3.prototype.update = function () {
     gEngine.Physics.processCollision(this.mAllObjs, []);
     this.mNonRigid.update(this.mCamera); 
     
-     if(this.time2-this.time1===20)
+     /*
+    if(this.time2-this.time1===20)
      {
          gEngine.GameLoop.stop();
      }
-    
+    */
     
     
 
@@ -320,18 +322,16 @@ Level3.prototype.update = function () {
     
     if(this.isdead)
     {
-        if(gEngine.Input.isKeyClicked(gEngine.Input.keys.S))
-            this.waitforkey = -1;
-        if(this.waitforkey>=0){
-            this.mPlayagain.setVisibility(1);
-            this.waitforkey = 1;
+        this.time2=this.time2+1;
+        this.mHero.mode=10;
+        this.mHero.getRigidBody().setMass(0);
+        this.mPlayagain.setVisibility(1);
+        if(gEngine.Input.isKeyClicked(gEngine.Input.keys.S)){
+            gEngine.GameLoop.stop();
+            this.mHero.sta=2;
         }
-        else{
-            this.time2=this.time2+1;
-            this.mHero.setMode(10);
-            this.mHero.sta=2;   
-        }   
     }
+        
     
     
     

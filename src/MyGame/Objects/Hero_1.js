@@ -23,7 +23,7 @@ function Hero1(spriteTexture) {
     
     GameObject.call(this, this.mHero);
 
-
+    
     this.mWalkHeroRight = new SpriteAnimateRenderable(spriteTexture);
     this.mWalkHeroRight.setColor([1, 1, 1, 0]);  // tints red
     this.mWalkHeroRight.getXform().setPosition(5, 29);
@@ -121,7 +121,7 @@ function Hero1(spriteTexture) {
     this.setRigidBody(this.r);
     this.r.setMass(0.7);
     this.r.setInertia(0);
-    this.r.setFriction(1.0);
+    this.r.setFriction(0);
     this.r.toggleDrawBound(true);
     //this.toggleDrawRenderable();
     //this.toggleDrawRigidShape();

@@ -288,7 +288,7 @@ End.prototype.update = function () {
         this.mTheLight.setLightTo(1);
         this.mHeroend.mode=11;
         this.mHeroend.getRigidBody().setMass(0);
-        this.mHeroend.rotateObjPointTo([175,-125],1);
+        this.mHeroend.rotateObjPointTo([175,-125],1,5);
         this.mHeroend.setSpeed(0.05);
         this.mBallon.setVisibility(1);
         this.mBallon.getXform().setSize(this.mHeroend.getXform().getSize()[0]*0.8,this.mHeroend.getXform().getSize()[1]*0.8);
@@ -307,7 +307,7 @@ End.prototype.update = function () {
         gEngine.DefaultResources.setGlobalAmbientIntensity(this.globalcolor);
         this.mHeroend.mode=11;
         this.mTheLight.setLightTo(1);
-        this.mHeroend.rotateObjPointTo([179,-75],1);
+        this.mHeroend.rotateObjPointTo([179,-72],1,0);
         this.mHeroend.setSpeed(0.05);
         this.mBallon.getXform().setSize(this.mHeroend.getXform().getSize()[0]*0.8,this.mHeroend.getXform().getSize()[1]*0.8);
         this.mBallon.getXform().setXPos(xpos+2.5);

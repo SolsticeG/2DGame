@@ -12,17 +12,17 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function Hero(spriteTexture) {
-        
-   this.mode=1;  
+    
+    this.mode=1;  
+    this.isfake=0;
     this.mHero = new SpriteRenderable(spriteTexture);
     this.mHero.setColor([1, 1, 1, 0]);  // tints red
     this.mHero.getXform().setPosition(5, 29);
     this.mHero.getXform().setSize(3.8, 6.5);
     this.mHero.setElementUVCoordinate(0.86, 1, 0.23, 0.48);
     this.sta=2;
-    
-    GameObject.call(this, this.mHero);
 
+    GameObject.call(this, this.mHero);
 
     this.mWalkHeroRight = new SpriteAnimateRenderable(spriteTexture);
     this.mWalkHeroRight.setColor([1, 1, 1, 0]);  // tints red
@@ -245,21 +245,24 @@ Hero.prototype.update = function () {
     var ypos = xform.getYPos();
     console.log(xpos,ypos);
 
+    
     if(xpos<=1)
     {
         xform.setXPos(1);
     }
+    
+    
+    if(!this.isfake)
+    {
     if(xpos>=99)
     {
         xform.setXPos(99);
     }
-
-        
-    
     if(xpos<=95 && xpos>=94) {
         this.sta=1;
         gEngine.GameLoop.stop();      
         
+    }
     }
     
     GameObject.prototype.update.call(this);

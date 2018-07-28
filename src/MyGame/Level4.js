@@ -116,7 +116,7 @@ Level4.prototype.unloadScene = function () {
     
     var nextlevel=null;
     if(this.mHero.sta===1) {
-        nextlevel=new End();
+        nextlevel=new Level5();
     }
     if(this.mHero.sta===2) {
         nextlevel=new Level4();
@@ -193,8 +193,6 @@ Level4.prototype.initialize = function () {
     this.mAllObjs.addToSet(this.mRoad7);
 
     
-    this.mNonRigid.addToSet(this.mPlayagain);
-    this.mNonRigid.addToSet(this.mlevel1pic);
     this.mNonRigid.addToSet(this.mSign);
     this.mNonRigid.addToSet(this.mCloud1);
     this.mNonRigid.addToSet(this.mCloud);
@@ -233,9 +231,10 @@ Level4.prototype.draw = function () {
 
     this.mCollisionInfos = []; 
     
-
-    this.mAllObjs.draw(this.mCamera);
     this.mNonRigid.draw(this.mCamera);
+    this.mAllObjs.draw(this.mCamera);
+    this.mPlayagain.draw(this.mCamera);
+    this.mlevel1pic.draw(this.mCamera);
     
     this.mMsg.draw(this.mCamera);
     this.mLevelMsg.draw(this.mCamera);
@@ -257,12 +256,12 @@ Level4.prototype.update = function () {
 
 
 
-     
+     /*
      if(this.time2-this.time1===20)
      {
          gEngine.GameLoop.stop();
      }
-
+     */
     
      this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1);
 
@@ -339,17 +338,13 @@ Level4.prototype.update = function () {
     
     if(this.isdead)
     {
-        if(gEngine.Input.isKeyClicked(gEngine.Input.keys.S))
-            this.waitforkey = -1;
-        if(this.waitforkey>=0){
-            this.mPlayagain.setVisibility(1);
-            this.waitforkey = 1;
+        this.time2=this.time2+1;
+        this.mHero.mode=10;
+        this.mHero.getRigidBody().setMass(0);
+        this.mPlayagain.setVisibility(1);
+        if(gEngine.Input.isKeyClicked(gEngine.Input.keys.S)){
+            gEngine.GameLoop.stop();
+            this.mHero.sta=2;
         }
-        else{
-            this.time2=this.time2+1;
-            this.mHero.setMode(10);
-            this.mHero.sta=2;   
-        }   
     }
-    
 };

@@ -183,7 +183,6 @@ MyGame.prototype.initialize = function () {
     this.mNonRigid.addToSet(this.mCloud);
     this.mNonRigid.addToSet(this.mBallon);
     this.mNonRigid.addToSet(this.mStair);
-    this.mNonRigid.addToSet(this.mPlayagain);
            
     
     
@@ -232,10 +231,11 @@ MyGame.prototype.draw = function () {
 
     this.mCamera.setupViewProjection();
     
+    this.mNonRigid.draw(this.mCamera);
     this.mAllObjs.draw(this.mCamera);
+    this.mPlayagain.draw(this.mCamera);
     
     this.mMsg.draw(this.mCamera);
-    this.mNonRigid.draw(this.mCamera);
     
     this.mMsg.draw(this.mCamera);  
     this.mMsg1.draw(this.mCamera);

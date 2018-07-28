@@ -1,3 +1,17 @@
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
 /*
  * File: MyGame.js 
  * This is the logic of our game. 
@@ -11,8 +25,9 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function Level2() {
-       
+function Level6() {
+    
+    
     this.kPlatformTexture = "assets/platform.png";
     this.kWallTexture = "assets/wall.png";
     this.kTargetTexture = "assets/target.png";
@@ -22,16 +37,17 @@ function Level2() {
     this.kBallon="assets/ballon.png";
     this.kStair="assets/stair.png";
     this.kStone="assets/stone.png";
-    this.kSign="assets/s2.png";
+    this.kSign="assets/s4.png";
     this.kRoad="assets/Road.png";
     this.kCloud_t="assets/cloud_t.png";
-    this.kSquare_t="assets/square_t.png";
+    this.kSquare_t="assets/square_h.png";
     this.kHeroSprite="assets/hero_sprite.png";
     this.kBg="assets/background.png";
     this.kPlayagain="assets/tips.png";
-    this.klevel1pic="assets/level2pic.png";
+    this.klevel1pic="assets/level6pic.png";
     
-    this.mState=2;
+    this.boxstate=0;
+    this.boxstate1=0;
     
     this.mSquare=null;
     this.mCloud=null;
@@ -57,23 +73,25 @@ function Level2() {
     this.mCamera = null;
 
     this.mMsg = null;
+    this.mMsg2 = null;
     this.mLevelMsg = null;
     this.mHelpMsg = null;
+    
+    this.mFocusObj = null;
     
     this.isdead=0;
     this.time1=0;
     this.time2=201;
     this.time= new Date();
-    this.waitforkey = 0;
     this.wait2s = 0;
-
-   
+    
+    this.ischange = 0;
     
 }
-gEngine.Core.inheritPrototype(Level2, Scene);
+gEngine.Core.inheritPrototype(Level6, Scene);
 
 
-Level2.prototype.loadScene = function () {
+Level6.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kPlatformTexture);
     gEngine.Textures.loadTexture(this.kWallTexture);
     gEngine.Textures.loadTexture(this.kTargetTexture);
@@ -92,7 +110,7 @@ Level2.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.klevel1pic);
 };
 
-Level2.prototype.unloadScene = function () {
+Level6.prototype.unloadScene = function () {
     
     gEngine.Textures.unloadTexture(this.kPlatformTexture);
     gEngine.Textures.unloadTexture(this.kWallTexture);
@@ -112,17 +130,19 @@ Level2.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.klevel1pic);
     
     var nextlevel=null;
-    if(this.mHero.sta===1)
-        {nextlevel=new Level3();}
-    if(this.mHero.sta===2)
-        {nextlevel=new Level2();}
+    if(this.mHero.sta===1) {
+        nextlevel=new Level7();
+    }
+    if(this.mHero.sta===2) {
+        nextlevel=new Level6();
+    }
         
     gEngine.Core.startScene(nextlevel);
     
     
 };
 
-Level2.prototype.initialize = function () {
+Level6.prototype.initialize = function () {
     // Step A: set up the cameras
     this.mCamera = new Camera(
         vec2.fromValues(50, 40), // position of the camera
@@ -133,45 +153,63 @@ Level2.prototype.initialize = function () {
             // sets the background to gray
     gEngine.DefaultResources.setGlobalAmbientIntensity(3);
       
-    this.mNonRigid = new GameObjectSet();
     this.mAllObjs = new GameObjectSet();
+    this.mNonRigid = new GameObjectSet();
     
-    //this.createBounds();    
     
     this.mCloud=new Cloud(this.kCloud,65,55.5,16,9.14);
-    this.mCloud1=new Cloud_1(this.kCloud1,35,44,10,6.25);
+    this.mCloud1=new Cloud_1(this.kCloud1,35,44,16,10);
     this.mSquare=new Square(this.kSquare,45,37,5,5);
     this.mSquare1=new Square(this.kSquare,55,47,5,5);
     this.mBallon=new Ballon(this.kBallon,10,35,5,10);
     this.mSign=new Sign(this.kSign,15,55,24,8);
-    this.mStair=new Stair2(this.kStair,94,33,10,13);
-    this.mStone=new Stone(this.kStone,72,35,17,17);
-    this.mHero=new Hero(this.kHeroSprite);
-    this.mPlayagain = new Playagain(this.kPlayagain, 50,40,40,20);
+    this.mStair=new Stair(this.kStair,94,33,10,13);
+    this.mStone=new Stone(this.kStone,72,34,17,17);
+
+    this.mCloudt=new Cloud_t(this.kCloud_t,65,55.5,18,10.2);
+    this.mSquaret=new Squaret(this.kSquare_t,45,37,4.8,4.8);  
+    this.mSquaret1 = new Squaret(this.kSquare_t,55,47,4.8,4.8);
+    this.mPlayagain = new Playagain(this.kPlayagain,50,40,40,20);
     this.mlevel1pic = new Playagain(this.klevel1pic,50,40,40,20);
     
+    this.mHero=new Hero2(this.kHeroSprite);
     
-    this.mRoad1=new Road(this.kRoad,12,14,28,26);
-    this.mRoad2=new Road(this.kRoad,70,14,65,26);
-    this.mCloudt=new Cloud_t(this.kCloud_t,65,55.5,18,10.2);
-    this.mSquaret=new Squaret(this.kSquare_t,45,37,4.8,4.8);
+
+
     
+    this.mRoad1=new Road(this.kRoad,15,-20,30,92);
+    this.mRoad2=new Road(this.kRoad,70,13,60,26);
+    this.mRoad3=new Road(this.kRoad,100,-20,140,20);
+    this.mRoad4=new Road(this.kRoad,120,0,5,5);
+    this.mRoad5=new Road(this.kRoad,110,-7,5,5);
+    this.mRoad6=new Road(this.kRoad,110,10,5,5);
+    this.mRoad7=new Road(this.kRoad,105,18,5,5);
     
     
     
     this.mCloudt.setVisibility(0);
     this.mSquaret.setVisibility(0);
+    this.mSquaret1.setVisibility(0);
     this.mPlayagain.setVisibility(0);
-    this.mlevel1pic.setVisibility(1);
 
     this.mAllObjs.addToSet(this.mStone);
     this.mAllObjs.addToSet(this.mSquare);
     this.mAllObjs.addToSet(this.mSquare1);
     this.mAllObjs.addToSet(this.mSquaret);
+    this.mAllObjs.addToSet(this.mSquaret1);
     this.mAllObjs.addToSet(this.mRoad1);
     this.mAllObjs.addToSet(this.mRoad2);
     this.mAllObjs.addToSet(this.mHero);
+    
+    
+    
+    this.mAllObjs.addToSet(this.mRoad3);
+    this.mAllObjs.addToSet(this.mRoad4);
+    this.mAllObjs.addToSet(this.mRoad5);
+    this.mAllObjs.addToSet(this.mRoad6);
+    this.mAllObjs.addToSet(this.mRoad7);
 
+    
     
     this.mNonRigid.addToSet(this.mSign);
     this.mNonRigid.addToSet(this.mCloud1);
@@ -180,18 +218,20 @@ Level2.prototype.initialize = function () {
     this.mNonRigid.addToSet(this.mStair);
     this.mNonRigid.addToSet(this.mCloudt);
     
+           
+    
     
     this.mMsg = new FontRenderable("Heavy");
     this.mMsg.setColor([0, 0, 0, 1]);
     this.mMsg.getXform().setPosition(70, 35);
     this.mMsg.setTextHeight(2);
     
-    this.mLevelMsg = new FontRenderable("Level 2");
+    this.mLevelMsg = new FontRenderable("Level 6");
     this.mLevelMsg.setColor([0, 0, 0, 1]);
     this.mLevelMsg.getXform().setPosition(94, 58);
     this.mLevelMsg.setTextHeight(1.5);
     
-    this.mHelpMsg = new FontRenderable("Can you move the stable things?");
+    this.mHelpMsg = new FontRenderable("?? -> !! ");
     this.mHelpMsg.setColor([0, 0, 0, 1]);
     this.mHelpMsg.getXform().setPosition(50, -26);
     this.mHelpMsg.setTextHeight(2);
@@ -200,18 +240,14 @@ Level2.prototype.initialize = function () {
 
 // This is the draw function, make sure to setup proper drawing environment, and more
 // importantly, make sure to _NOT_ change any state.
-Level2.prototype.draw = function () {
+Level6.prototype.draw = function () {
     // Step A: clear the canvas
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
     this.mCamera.setupViewProjection();
-       
-
     
-    // for now draw these ...
-    /*for (var i = 0; i<this.mCollisionInfos.length; i++) 
-        this.mCollisionInfos[i].draw(this.mCamera); */
-    this.mCollisionInfos = [];
+
+    this.mCollisionInfos = []; 
     
     this.mNonRigid.draw(this.mCamera);
     this.mAllObjs.draw(this.mCamera);
@@ -220,75 +256,120 @@ Level2.prototype.draw = function () {
     
     this.mMsg.draw(this.mCamera);
     this.mLevelMsg.draw(this.mCamera);
-    this.mHelpMsg.draw(this.mCamera); 
-    
-    
+    this.mHelpMsg.draw(this.mCamera);
+
 };
 
 
-
-// The Update function, updates the application state. Make sure to _NOT_ draw
-// anything from this function!
-
-Level2.prototype.update = function () {
+Level6.prototype.update = function () {
     if(this.wait2s < 120)
         this.wait2s +=1;
     else
         this.mlevel1pic.setVisibility(0);
     
+    var zoomDelta = 0.5;
+    
+    this.mCamera.update();  
+
+     
+    // if(this.time2-this.time1===20)
+    // {
+    //     gEngine.GameLoop.stop();
+    // }
+
+    
+     this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1);
+
+    this.mFocusObj = this.mHero;
+
+    // zoom
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.J)) {
+        this.mCamera.zoomTowards(this.mFocusObj.getXform().getPosition(), 1 - zoomDelta);
+    }
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.K)) {
+        this.mCamera.zoomTowards(this.mFocusObj.getXform().getPosition(), 1 + zoomDelta);
+    }
+    this.mCamera.update();
+    
+    var ypos=this.mHero.getXform().getYPos();
+    // interaction with the WC bound
+    //if(ypos>=-10 )
+        //this.mCamera.panWith(this.mHero.getXform(), 0.999999999);
+    
+    //if(this.boxstate)
+        //this.mCamera.panWith(this.mHero.getXform(), 0.8);
+        
+    //this.mCamera.update();    
+    
     this.mAllObjs.update(this.mCamera);    
     gEngine.Physics.processCollision(this.mAllObjs, []);
-    this.mNonRigid.update(this.mCamera);  
-     
-     /*
-      if(this.time2-this.time1===20)
-     {
-         gEngine.GameLoop.stop();
-     }
-     */
-     
-    var xp=this.mStair.getXform().getXPos();
-    var xpos=this.mHero.getXform().getXPos();
-    var ypos=this.mHero.getXform().getYPos();
+    this.mNonRigid.update(this.mCamera);   
     
-    if(xpos>=xp-0.5 && xpos<=xp+0.5)
+    this.xsize = 20;
+    this.ysize = 20;
+    
+    //this.mCamera.update();
+    
+    var xform = this.mHero.getXform();
+    var xpos = xform.getXPos();
+    var ypos = xform.getYPos();
+    
+    
+    if(1)
     {
-        this.mHero.sta=1;
-        gEngine.GameLoop.stop();
+        if(ypos<=18 && !this.isdead) 
+        { 
+            this.mHero.mode=10;
+            this.isdead=1;
+            this.mHero.sta=2;       
+            this.time1=this.time.getMilliseconds();
+            this.time2=this.time1;   
+         }
+            
     }
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.H)) {
         this.mHelpMsg.getXform().setYPos(25); 
     }
-    
-    if(xpos<=65 && xpos>=57 && ypos>47 && !this.isdead) {
+    if(xpos<=60 && xpos>=53 && ypos>47&& !this.isdead) {
         this.flag=true;
         this.mHero.mode=10;
         this.mHero.sta=2;
+        this.isdead=1;
         this.mCloudt.setVisibility(1);
-        this.isdead=1;
         this.time1=this.time.getMilliseconds();
-        this.time2=this.time1;            
+        this.time2=this.time1;       
+        
     }
     
     
-    if(ypos<=20 && !this.isdead) { 
-        this.mHero.mode=10;
-        this.isdead=1;
-        this.mHero.sta=2;       
-        this.time1=this.time.getMilliseconds();
-        this.time2=this.time1;   
-    }
-     
-     this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1);
-     
-     
     var xsquare=this.mSquare.getXform().getXPos();
-    
+    var xsquare1 = this.mSquare1.getXform().getXPos();
     if(xpos>xsquare-2 && xpos<xsquare+2 && ypos===31.25)
     {
+        this.boxstate=1;
         this.mSquare.setVisibility(0);
+        this.mSquare.getXform().setYPos(-100);
         this.mSquaret.setVisibility(1);
+        this.mSquaret.isfinal = 2;
+        this.ischange = 1;
         
+    }
+    if(xpos>xsquare1-2 && xpos<xsquare1+2 && ypos === 41.25){
+        this.boxstate1 = 1;
+        this.mSquare1.setVisibility(!this.boxstate1);
+        this.mSquare1.getXform().setYPos(-100);
+        this.mSquaret1.setVisibility(this.boxstate1);
+        this.mSquaret1.isfinal = 3;
+        
+    }
+    var xsquaret1 = this.mSquaret1.getXform().getXPos();
+    //var ysquaret1 = this.mSquaret1.getXform().getYPos();
+    //console.log(this.ischange,ysquaret1);
+    
+    console.log(xpos,ypos);
+    if(xpos>xsquaret1-2 && xpos<xsquaret1+2 && ypos < 52.66 && ypos > 52.64 && this.ischange && xpos <1.2){
+        console.log(this.ischange,1);
+        this.mHero.getXform().setXPos(98);
     }
     
     if(this.isdead)

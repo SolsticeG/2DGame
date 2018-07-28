@@ -13,7 +13,7 @@
 
 function Square(spriteTexture, atX, atY, size1,size2) {
         
-    
+    this.isfake=0;
     this.mSquare = new SpriteRenderable(spriteTexture);
     this.mSquare.setColor([1, 1, 1, 0]);
     this.mSquare.getXform().setPosition(atX,atY);
@@ -46,12 +46,11 @@ gEngine.Core.inheritPrototype(Square,GameObject);
 Square.prototype.update = function () {
  
 
-    /*var v=vec2.fromValues(0.0005, 0);
-    this.r.setVelocity(v);
-    console.log("ok"+v);
-    console.log('oo'+this.getXform().getPosition());*/
+ 
     
     var xpos = this.getXform().getXPos();
+    if(!this.isfake)
+    {
     if(this.isfinal)
     {
     if(xpos>58)
@@ -60,6 +59,30 @@ Square.prototype.update = function () {
         this.setSpeed(0.05);
     }
     
+    if(this.isfinal===1){
+        if(xpos>58)
+            this.setSpeed(-0.05);
+        if(xpos<45)
+            this.setSpeed(0.05);
+    }
+    if(this.isfinal===2){
+        
+        if(xpos>58)
+            this.setSpeed(-0.1);
+        if(xpos<30)
+            this.setSpeed(0.1);
+    }
+    if(this.isfinal===3){
+        
+        this.setSpeed(-0.13);
+        if(xpos<0)
+            this.getXform().setXPos(100);
+        if(xpos>100)
+         this.getXform().setXPos(0);
+        
+    }
+
+    }
     
     GameObject.prototype.update.call(this);
 };

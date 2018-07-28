@@ -202,7 +202,7 @@ Startpage.prototype.draw = function () {
     {
         setTimeout(function() {
             console.log('Woke up!!');
-}, 10000);
+    }, 10000);
         
     }
     
