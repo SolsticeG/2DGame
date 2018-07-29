@@ -30,7 +30,7 @@ function Level5() {
     this.kBg="assets/background.png";
     this.kEnemy="assets/enemy_sprite.png";
     this.kPlayagain="assets/tips.png";
-    this.klevel1pic="assets/level5pic.png";
+    this.klevel1pic="assets/level6pic.png";
     
     this.mState=0;
     this.once=0;
@@ -64,7 +64,7 @@ function Level5() {
     this.mStone=null;
     this.mStair=null;
     this.mSign=null;
-    this.mHero = null;
+    this.mHero= null;
     this.mBg=null;
     this.mCloudt=null;
     this.mSquaret=null;
@@ -138,7 +138,7 @@ Level5.prototype.unloadScene = function () {
     
     var nextlevel=null;
     if(this.mHero.sta===1)
-        {nextlevel=new Level6();}
+        {nextlevel=new Level4();}
     if(this.mHero.sta===2)
         {nextlevel=new Level5();}
         
@@ -251,12 +251,12 @@ Level5.prototype.initialize = function () {
     this.mMsg.getXform().setPosition(70, 35);
     this.mMsg.setTextHeight(2);
     
-    this.mLevelMsg = new FontRenderable("Level 5");
+    this.mLevelMsg = new FontRenderable("Level 6");
     this.mLevelMsg.setColor([0, 0, 0, 1]);
     this.mLevelMsg.getXform().setPosition(90, 58);
     this.mLevelMsg.setTextHeight(1.5);
     
-    this.mHelpMsg = new FontRenderable("What's the next sentence?...");
+    this.mHelpMsg = new FontRenderable("UP!UP!UP!");
     this.mHelpMsg.setColor([0, 0, 0, 1]);
     this.mHelpMsg.getXform().setPosition(50, -26);
     this.mHelpMsg.setTextHeight(2);
@@ -337,15 +337,11 @@ Level5.prototype.die=function(aEnemy)
         this.once=1;
              
     }    
-    
-    
-
-
 };
 
 
 Level5.prototype.update = function () {
-    if(this.wait2s < 120)
+    if(this.wait2s < 60)
         this.wait2s +=1;
     else
         this.mlevel1pic.setVisibility(0);
@@ -371,30 +367,32 @@ Level5.prototype.update = function () {
     this.mPlatform8.getXform().incRotationByDegree(-0.8);
     this.mPlatform9.getXform().incRotationByDegree(-0.8);
     
-    console.log("ok"+this.mPlatform6.getXform().getPosition());
     
-    this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1,10);
+    this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1,5);
     var xform = this.mHero.getXform();
     var xpos = xform.getXPos();
     var ypos = xform.getYPos();
     console.log(xpos,ypos);
     
     
-    if(ypos>65)
+    if(xpos<1)
+        this.mHero.getXform().setXPos(1);
+    
+    /*if(ypos>70)
     {
-        this.mPlatform.getRigidBody().setFriction(1.0);
-        this.mPlatform1.getRigidBody().setFriction(0.5);
-        this.mPlatform2.getRigidBody().setFriction(0.5);
-        this.mPlatform3.getRigidBody().setFriction(0.5);
-        this.mPlatform4.getRigidBody().setFriction(0.5);
-        this.mPlatform5.getRigidBody().setFriction(0.5);
-        this.mPlatform6.getRigidBody().setFriction(0.5);
-        this.mPlatform7.getRigidBody().setFriction(0.5);
-        this.mPlatform8.getRigidBody().setFriction(0.5);
-        this.mPlatform9.getRigidBody().setFriction(0.5);
-        this.mPlatform10.getRigidBody().setFriction(0.5);
-        this.mHero.getRigidBody().setFriction(1.0);
-    }
+        this.mPlatform.getRigidBody().setFriction(0.1);
+        this.mPlatform1.getRigidBody().setFriction(0.1);
+        this.mPlatform2.getRigidBody().setFriction(0.1);
+        this.mPlatform3.getRigidBody().setFriction(0.1);
+        this.mPlatform4.getRigidBody().setFriction(0.1);
+        this.mPlatform5.getRigidBody().setFriction(0.1);
+        this.mPlatform6.getRigidBody().setFriction(0);
+        this.mPlatform7.getRigidBody().setFriction(0);
+        this.mPlatform8.getRigidBody().setFriction(0);
+        this.mPlatform9.getRigidBody().setFriction(0);
+        this.mPlatform10.getRigidBody().setFriction(0.1);
+        this.mHero.getRigidBody().setFriction(0.1);
+    }*/
     
     this.die(this.mEnemy);
     this.die(this.mEnemy1);
@@ -407,7 +405,7 @@ Level5.prototype.update = function () {
     if(this.count>=3)
         this.heightstate=1;
     
-    if(xpos<=65 && xpos>=57 && ypos>47 &&ypos<60 && !this.isdead) {
+    if(xpos<=73 && xpos>=57 && ypos>51 && ypos<60 && !this.isdead) {
         this.mHero.sta=2;
         this.mCloudt.setVisibility(1);
         this.mHero.mode=10;

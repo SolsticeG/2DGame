@@ -30,7 +30,7 @@ function Level3() {
     this.kHeroSprite="assets/hero_sprite.png";
     this.kBg="assets/background.png";
     this.kPlayagain="assets/tips.png";
-    this.klevel1pic="assets/level3pic.png";
+    this.klevel1pic="assets/level5pic.png";
     
     this.mSquare=null;
     this.mCloud=null;
@@ -112,7 +112,7 @@ Level3.prototype.unloadScene = function () {
     
     var nextlevel=null;
     if(this.mHero.sta===1)
-        {nextlevel=new Level4();}
+        {nextlevel=new Level5();}
     if(this.mHero.sta===2)
         {nextlevel=new Level3();}
         
@@ -190,7 +190,7 @@ Level3.prototype.initialize = function () {
     this.mMsg2.getXform().setPosition(-70, -35);
     this.mMsg2.setTextHeight(2);
     
-    this.mLevelMsg = new FontRenderable("Level 3");
+    this.mLevelMsg = new FontRenderable("Level 5");
     this.mLevelMsg.setColor([0, 0, 0, 1]);
     this.mLevelMsg.getXform().setPosition(94, 58);
     this.mLevelMsg.setTextHeight(1.5);
@@ -235,7 +235,7 @@ Level3.prototype.draw = function () {
 
 
 Level3.prototype.update = function () {
-    if(this.wait2s < 120)
+    if(this.wait2s < 60)
         this.wait2s +=1;
     else
         this.mlevel1pic.setVisibility(0);
@@ -253,10 +253,11 @@ Level3.prototype.update = function () {
     
     
 
-    this.xsize = 20;
-    this.ysize = 20;
+    this.xsize = this.mStone.getXform().getWidth()/4;
     
-     this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1);
+    this.ysize = this.mStone.getXform().getHeight()/4;
+    
+     this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1,5);
     
     if(gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Left)) {
         if(this.mCamera.isMouseInViewport()) {
@@ -264,14 +265,13 @@ Level3.prototype.update = function () {
             var WCY = this.mCamera.mouseWCY();
             var mX = this.mStone.getXform().getXPos();
             var mY = this.mStone.getXform().getYPos();
-            console.log(mX,mY,WCX,WCY);
             
             if(WCX <= mX + this.xsize && WCX >= mX - this.xsize && WCY <= mY + this.ysize && WCY >= mY - this.ysize) {
-                console.log(1);
                 this.mMsg.getXform().setPosition(-70, -35);
                 this.mMsg2.getXform().setPosition(mX-2,35);
-                this.mStone.getRigidBody().setMass(30);
-                
+                this.mStone.getRigidBody().setMass(5);
+                this.mStone.getRigidBody().setFriction(0.3);
+                this.mRoad2.getRigidBody().setFriction(0.5);
             }
         }
     }
@@ -301,7 +301,7 @@ Level3.prototype.update = function () {
         this.time2=this.time1;   
     }
     
-    if(xpos<=65 && xpos>=57 && ypos>47 && !this.isdead) {
+    if(xpos<=73 && xpos>=57 && ypos>51 && ypos<60 && !this.isdead) {
         this.flag=true;
         this.mHero.sta=2;
         this.mHero.mode=10;

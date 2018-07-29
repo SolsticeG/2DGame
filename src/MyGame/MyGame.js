@@ -37,8 +37,7 @@ function MyGame() {
     this.time2=201;
     this.time= new Date();
     this.flag=false;
-    this.wait5s = 0;
-    
+
     
     this.mSquare=null;
     this.mCloud=null;
@@ -206,12 +205,12 @@ MyGame.prototype.initialize = function () {
     this.mMsg3.setTextHeight(2);
     
     this.mMsg4 = new FontRenderable("H for hint, yet try not to use that");
-    this.mMsg4.setColor([0, 0, 0, 1]);
+    this.mMsg4.setColor([1, 0, 0, 1]);
     this.mMsg4.getXform().setPosition(50, 22);
     this.mMsg4.setTextHeight(2);
     
     this.mMsg5 = new FontRenderable("MouseLeft pressed to move objects");
-    this.mMsg5.setColor([0, 0, 0, 1]);
+    this.mMsg5.setColor([1, 0, 0, 1]);
     this.mMsg5.getXform().setPosition(50, 24);
     this.mMsg5.setTextHeight(2);
     
@@ -250,7 +249,7 @@ MyGame.prototype.draw = function () {
 
 MyGame.prototype.update = function () {
      
-     console.log(this.time1,this.time2);
+     //console.log(this.time1,this.time2);
     this.mAllObjs.update(this.mCamera);    
     gEngine.Physics.processCollision(this.mAllObjs, []);
     this.mNonRigid.update(this.mCamera);   
@@ -272,7 +271,7 @@ MyGame.prototype.update = function () {
         this.mMsg3.getXform().setYPos(-25);
     }
 
-  this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1);
+  this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1,5);
   
 
     var xsquare=this.mSquare.getXform().getXPos();
@@ -284,7 +283,7 @@ MyGame.prototype.update = function () {
     }
         
     if(ypos<=20 && !this.isdead) { 
-        this.mHero.setMode(10);
+        this.mHero.mode=10;
         this.isdead=1;
         this.mHero.sta=2;       
         this.time1=this.time.getMilliseconds();
@@ -293,29 +292,16 @@ MyGame.prototype.update = function () {
     
     if(this.isdead)
     {
-        if(gEngine.Input.isKeyClicked(gEngine.Input.keys.S))
-            this.wait5s = -1;
-        if(this.wait5s>=0){
-            this.mPlayagain.setVisibility(1);
-            this.wait5s = 1;
+        this.mHero.mode=10;
+        this.mHero.getRigidBody().setMass(0);
+        this.mPlayagain.setVisibility(1);
+        if(gEngine.Input.isKeyClicked(gEngine.Input.keys.S)){
+            gEngine.GameLoop.stop();
+            this.mHero.sta=2;
         }
-        else{
-            this.time2=this.time2+1;
-            this.mHero.setMode(10);
-            this.mHero.sta=2;   
-        }
-        //if(this.wait5s < 300){
-        //    this.mPlayagain.setVisibility(1);
-        //    this.wait5s +=1;
-        //}
     }
-     
-     if(this.time2-this.time1===50)
-     {
-         gEngine.GameLoop.stop();
-     }
         
     
-    console.log("ok"+this.isdead);
+    //console.log("ok"+this.isdead);
     
 };

@@ -18,8 +18,9 @@
 
 function Endpage() {
        
-    this.kEndpic = "assets/Endpic.png";/////////////////
+    this.kEndpic = "assets/Endpic.png";
     this.kEndpic2 = "assets/Endpic2.png";
+    //this.kEndpic3 = "assets/credit.png";
     
     this.mState=2;
     this.flag=false;
@@ -35,20 +36,19 @@ function Endpage() {
     
     this.mEndpic = null;////////////////////////
     this.mEndpic2 = null;
+    //this.mEndpic3 = null;
     
 }
 gEngine.Core.inheritPrototype(Endpage, Scene);
 
 Endpage.prototype.loadScene = function () {
-    //gEngine.AudioClips.loadAudio(this.kBgClip);
-    
-    gEngine.Textures.loadTexture(this.kEndpic);
-    gEngine.Textures.loadTexture(this.kEndpic2);
-            
+    //gEngine.Textures.loadTexture(this.kEndpic3);
 };
 
 Endpage.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kEndpic);
+    gEngine.Textures.unloadTexture(this.kEndpic2);
+    //gEngine.Textures.unloadTexture(this.kEndpic3);
  
     
     var nextlevel=null;
@@ -73,9 +73,11 @@ Endpage.prototype.initialize = function () {
     this.mEndpic = new Endpic(this.kEndpic,50,40,100,50);//////////
     
     this.mEndpic2 = new Endpic(this.kEndpic2,50,40,100,50);
+    //this.mEndpic3 = new Endpic(this.kEndpic3,50,40,100,50);
     
     this.mEndpic.setVisibility(1);
     this.mEndpic2.setVisibility(0);
+    //this.mEndpic3.setVisibility(0);
     
 
 };
@@ -97,6 +99,7 @@ Endpage.prototype.draw = function () {
     //this.mNonRigid.draw(this.mCamera);
     this.mEndpic.draw(this.mCamera);
     this.mEndpic2.draw(this.mCamera);
+    this.mEndpic3.draw(this.mCamera);
     
     //this.mMsg.draw(this.mCamera);
     
@@ -109,8 +112,12 @@ Endpage.prototype.draw = function () {
 Endpage.prototype.update = function () {
     this.count+=1;
     
-    if(this.count===900){
+    if(this.count===750){
        this.mEndpic.setVisibility(0);
        this.mEndpic2.setVisibility(1);
     }
+    /*if(this.count===1000){
+        this.mEndpic2.setVisibility(0);
+        this.mEndpic3.setVisibility(1);
+    }*/
 };

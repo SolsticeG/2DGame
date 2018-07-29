@@ -21,6 +21,13 @@ function Egg() {
     this.kBg="assets/background.png";
     this.kPlayagain="assets/tips.png";
     
+    this.kA="assets/a.png";
+    this.kB="assets/b.png";
+    this.kC="assets/c.png";
+    this.kD="assets/d.png";
+    this.kSs1="assets/ss1.png";
+    this.kSs2="assets/ss2.png";
+    
     this.mState=2;
     this.isdead=0;
     this.time1=0;
@@ -62,6 +69,14 @@ Egg.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kHeroSprite);
     gEngine.Textures.loadTexture(this.kRoad);
     gEngine.Textures.loadTexture(this.kPlayagain);
+    gEngine.Textures.loadTexture(this.kA);
+    gEngine.Textures.loadTexture(this.kB);
+    gEngine.Textures.loadTexture(this.kC);
+    gEngine.Textures.loadTexture(this.kD);
+    gEngine.Textures.loadTexture(this.kSs1);
+    gEngine.Textures.loadTexture(this.kSs2);
+    
+    
             
 };
 
@@ -73,7 +88,12 @@ Egg.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kHeroSprite);
     gEngine.Textures.unloadTexture(this.kRoad);
     gEngine.Textures.unloadTexture(this.kPlayagain);
-    
+    gEngine.Textures.unloadTexture(this.kA);
+    gEngine.Textures.unloadTexture(this.kB);
+    gEngine.Textures.unloadTexture(this.kC);
+    gEngine.Textures.unloadTexture(this.kD);
+    gEngine.Textures.unloadTexture(this.kSs1);
+    gEngine.Textures.unloadTexture(this.kSs2);
 
     nextlevel=new Egg();        
     gEngine.Core.startScene(nextlevel);
@@ -96,26 +116,29 @@ Egg.prototype.initialize = function () {
     this.mNonRigid = new GameObjectSet();
         
 
-    this.mSquare=new Square(this.kSquare,45,37.5,5,5);
-    this.mSquare1=new Square(this.kSquare,55,37.5,5,5);
-    this.mSquare2=new Square(this.kSquare,65,37.5,5,5);
-    this.mSquare3=new Square(this.kSquare,75,37.5,5,5);
+    this.mSquare=new Squaret(this.kA,45,37,5,5);
+    this.mSquare1=new Squaret(this.kB,55,37,5,5);
+    this.mSquare2=new Squaret(this.kC,65,37,5,5);
+    this.mSquare3=new Squaret(this.kD,75,37,5,5);
     
-    this.mSquare.isfake=1;
+    this.mSquare.isfinal=0;
     this.mSquare.setSpeed(0);
     
-    this.mSquare1.isfake=1;
+    this.mSquare1.isfinal=0;
     this.mSquare1.setSpeed(0);
     
-    this.mSquare2.isfake=1;
+    this.mSquare2.isfinal=0;
     this.mSquare2.setSpeed(0);    
     
-    this.mSquare3.isfake=1;
+    this.mSquare3.isfinal=0;
     this.mSquare3.setSpeed(0);
     
-    this.mSign=new Sign(this.kSign,15,50,24,8);
-    this.mSign2=new Sign(this.kSign,75,50,24,8);
-
+    this.mSign=new Sign(this.kSs1,17,50,40,25);
+    this.mSign2=new Sign(this.kSs2,77,50,40,25);
+    
+    this.mSign.getRenderable().setElementUVCoordinate(0, 1,0,1);
+    this.mSign2.getRenderable().setElementUVCoordinate(0, 1,0,1);
+    
     this.mHero=new Hero(this.kHeroSprite);
     this.mRoad1=new Road(this.kRoad,12,14,28,26);
     this.mRoad2=new Road(this.kRoad,70,14,65,26);
@@ -174,6 +197,19 @@ Egg.prototype.update = function () {
     var xpos = xform.getXPos();
     var ypos = xform.getYPos();
     
+    console.log(xpos,ypos);
+    
+    if(xpos> 41 && xpos<49 && ypos>31.24 && ypos<31.26 && !this.isdead)
+        this.isdead=1;
+    if(xpos> 51 && xpos<59 && ypos>31.24 && ypos<31.26 && !this.isdead)
+        this.isdead=1;
+    if(xpos> 61 && xpos<69 && ypos>31.24 && ypos<31.26 && !this.isdead)
+        this.isdead=1;
+    if(xpos> 71 && xpos<79 && ypos>31.24 && ypos<31.26 && !this.isdead)
+        this.isdead=1;
+        
+    if(xpos>75 && xpos<80 && ypos>43)
+        ;
     
     if(this.isdead)
     {

@@ -117,7 +117,7 @@ Level1.prototype.unloadScene = function () {
     
     var nextlevel=null;
     if(this.mHero.sta===1)
-        {nextlevel=new Level2();}
+        {nextlevel=new Level6();}
     if(this.mHero.sta===2)
         {nextlevel=new Level1();}
         
@@ -196,7 +196,7 @@ Level1.prototype.initialize = function () {
     this.mLevelMsg.getXform().setPosition(94, 58);
     this.mLevelMsg.setTextHeight(1.5);
     
-    this.mHelpMsg = new FontRenderable("What's the next sentence?...");
+    this.mHelpMsg = new FontRenderable("Repent and be saved.");
     this.mHelpMsg.setColor([0, 0, 0, 1]);
     this.mHelpMsg.getXform().setPosition(50, -26);
     this.mHelpMsg.setTextHeight(2);
@@ -237,7 +237,7 @@ Level1.prototype.draw = function () {
 
 
 Level1.prototype.update = function () {
-    if(this.wait2s < 120)
+    if(this.wait2s < 60)
         this.wait2s +=1;
     else
         this.mlevel1pic.setVisibility(0);
@@ -248,12 +248,14 @@ Level1.prototype.update = function () {
        //  gEngine.GameLoop.stop();
     // }
              
-    this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1);
+    this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1,5);
     var xform = this.mHero.getXform();
     var xpos = xform.getXPos();
     var ypos = xform.getYPos();
     
-    if(xpos<=65 && xpos>=57 && ypos>47 && !this.isdead) {
+    
+    
+    if(xpos<=73 && xpos>=57 && ypos>51 && ypos<60 && !this.isdead) {
         this.mHero.sta=2;
         this.mCloudt.setVisibility(1);
         this.mHero.mode=10;

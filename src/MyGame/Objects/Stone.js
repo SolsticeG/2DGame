@@ -30,6 +30,7 @@ function Stone(spriteTexture, atX, atY, size1,size2) {
     r.setRestitution(0);
     r.setMass(0);
     r.setFriction(0.1);
+    r.setInertia(0);
     //this.toggleDrawRenderable();
     //this.toggleDrawRigidShape();
     
@@ -40,37 +41,4 @@ gEngine.Core.inheritPrototype(Stone, WASDObj);
 
 Stone.prototype.update = function (mCamera) {
     GameObject.prototype.update.call(this);
-    /*var kWASDDelta = 0.3;
-    var xform = this.getXform();
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Up)) {
-        xform.incYPosBy(kWASDDelta);
-    }
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Down)) {
-        xform.incYPosBy(-kWASDDelta);
-    }
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Left)) {
-        xform.incXPosBy(-kWASDDelta);
-    }
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)) {
-        xform.incXPosBy(kWASDDelta);
-    }*/
-    
-    if(gEngine.Input.isButtonPressed(gEngine.Input.mouseButton.Left)) {
-        /*if(mCamera.isMouseInViewport()) {
-            var WCX = mCamera.mouseWCX();
-            var WCY = mCamera.mouseWCY();
-            var mX = this.mStone.getXform().getXPos();
-            var mY = this.mStone.getXform().getYPos();
-            console.log(mX,mY,WCX,WCY);
-            
-            if(WCX <= mX + this.xsize && WCX >= mX - this.xsize && WCY <= mY + this.ysize && WCY >= mY - this.ysize) {
-                console.log(1);
-                this.mStone.getXform().setXPos(mCamera.mouseWCX());
-                this.mStone.getXform().setYPos(mCamera.mouseWCY());
-            }
-        }*/
-        
-    }
-    
-    
 };

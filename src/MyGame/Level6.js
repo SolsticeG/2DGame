@@ -37,14 +37,14 @@ function Level6() {
     this.kBallon="assets/ballon.png";
     this.kStair="assets/stair.png";
     this.kStone="assets/stone.png";
-    this.kSign="assets/s4.png";
+    this.kSign="assets/rcyz.png";
     this.kRoad="assets/Road.png";
     this.kCloud_t="assets/cloud_t.png";
     this.kSquare_t="assets/square_h.png";
     this.kHeroSprite="assets/hero_sprite.png";
     this.kBg="assets/background.png";
     this.kPlayagain="assets/tips.png";
-    this.klevel1pic="assets/level6pic.png";
+    this.klevel1pic="assets/level2pic.png";
     
     this.boxstate=0;
     this.boxstate1=0;
@@ -131,7 +131,7 @@ Level6.prototype.unloadScene = function () {
     
     var nextlevel=null;
     if(this.mHero.sta===1) {
-        nextlevel=new Level7();
+        nextlevel=new Level2();
     }
     if(this.mHero.sta===2) {
         nextlevel=new Level6();
@@ -177,8 +177,8 @@ Level6.prototype.initialize = function () {
 
 
     
-    this.mRoad1=new Road(this.kRoad,15,-20,30,92);
-    this.mRoad2=new Road(this.kRoad,70,13,60,26);
+    this.mRoad1=new Road(this.kRoad,15,-19,30,92);
+    this.mRoad2=new Road(this.kRoad,70,14,60,26);
     this.mRoad3=new Road(this.kRoad,100,-20,140,20);
     this.mRoad4=new Road(this.kRoad,120,0,5,5);
     this.mRoad5=new Road(this.kRoad,110,-7,5,5);
@@ -226,12 +226,12 @@ Level6.prototype.initialize = function () {
     this.mMsg.getXform().setPosition(70, 35);
     this.mMsg.setTextHeight(2);
     
-    this.mLevelMsg = new FontRenderable("Level 6");
+    this.mLevelMsg = new FontRenderable("Level 2");
     this.mLevelMsg.setColor([0, 0, 0, 1]);
     this.mLevelMsg.getXform().setPosition(94, 58);
     this.mLevelMsg.setTextHeight(1.5);
     
-    this.mHelpMsg = new FontRenderable("?? -> !! ");
+    this.mHelpMsg = new FontRenderable("?? -> !!");
     this.mHelpMsg.setColor([0, 0, 0, 1]);
     this.mHelpMsg.getXform().setPosition(50, -26);
     this.mHelpMsg.setTextHeight(2);
@@ -262,12 +262,11 @@ Level6.prototype.draw = function () {
 
 
 Level6.prototype.update = function () {
-    if(this.wait2s < 120)
+    if(this.wait2s < 60)
         this.wait2s +=1;
     else
         this.mlevel1pic.setVisibility(0);
     
-    var zoomDelta = 0.5;
     
     this.mCamera.update();  
 
@@ -278,28 +277,13 @@ Level6.prototype.update = function () {
     // }
 
     
-     this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1);
+     this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1,5);
 
-    this.mFocusObj = this.mHero;
 
-    // zoom
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.J)) {
-        this.mCamera.zoomTowards(this.mFocusObj.getXform().getPosition(), 1 - zoomDelta);
-    }
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.K)) {
-        this.mCamera.zoomTowards(this.mFocusObj.getXform().getPosition(), 1 + zoomDelta);
-    }
     this.mCamera.update();
     
     var ypos=this.mHero.getXform().getYPos();
-    // interaction with the WC bound
-    //if(ypos>=-10 )
-        //this.mCamera.panWith(this.mHero.getXform(), 0.999999999);
-    
-    //if(this.boxstate)
-        //this.mCamera.panWith(this.mHero.getXform(), 0.8);
-        
-    //this.mCamera.update();    
+
     
     this.mAllObjs.update(this.mCamera);    
     gEngine.Physics.processCollision(this.mAllObjs, []);
@@ -315,9 +299,8 @@ Level6.prototype.update = function () {
     var ypos = xform.getYPos();
     
     
-    if(1)
-    {
-        if(ypos<=18 && !this.isdead) 
+
+    if(ypos<=21 && !this.isdead) 
         { 
             this.mHero.mode=10;
             this.isdead=1;
@@ -325,12 +308,11 @@ Level6.prototype.update = function () {
             this.time1=this.time.getMilliseconds();
             this.time2=this.time1;   
          }
-            
-    }
+    
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.H)) {
         this.mHelpMsg.getXform().setYPos(25); 
     }
-    if(xpos<=60 && xpos>=53 && ypos>47&& !this.isdead) {
+    if(xpos<=73 && xpos>=57 && ypos>51 && ypos<60 && !this.isdead) {
         this.flag=true;
         this.mHero.mode=10;
         this.mHero.sta=2;
@@ -344,6 +326,7 @@ Level6.prototype.update = function () {
     
     var xsquare=this.mSquare.getXform().getXPos();
     var xsquare1 = this.mSquare1.getXform().getXPos();
+    
     if(xpos>xsquare-2 && xpos<xsquare+2 && ypos===31.25)
     {
         this.boxstate=1;
@@ -354,7 +337,7 @@ Level6.prototype.update = function () {
         this.ischange = 1;
         
     }
-    if(xpos>xsquare1-2 && xpos<xsquare1+2 && ypos === 41.25){
+    if(xpos>xsquare1-2 && xpos<xsquare1+2 && ypos === 41.25 &&this.ischange){
         this.boxstate1 = 1;
         this.mSquare1.setVisibility(!this.boxstate1);
         this.mSquare1.getXform().setYPos(-100);
@@ -362,13 +345,8 @@ Level6.prototype.update = function () {
         this.mSquaret1.isfinal = 3;
         
     }
-    var xsquaret1 = this.mSquaret1.getXform().getXPos();
-    //var ysquaret1 = this.mSquaret1.getXform().getYPos();
-    //console.log(this.ischange,ysquaret1);
-    
-    console.log(xpos,ypos);
-    if(xpos>xsquaret1-2 && xpos<xsquaret1+2 && ypos < 52.66 && ypos > 52.64 && this.ischange && xpos <1.2){
-        console.log(this.ischange,1);
+
+    if(ypos > 52.64 && xpos <1.2){
         this.mHero.getXform().setXPos(98);
     }
     

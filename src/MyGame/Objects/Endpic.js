@@ -38,7 +38,7 @@ function Endpic(spriteTexture, atX, atY, size1,size2) {
 gEngine.Core.inheritPrototype(Endpic, GameObject);
 
 
-startpic.prototype.update = function () {
+Endpic.prototype.update = function () {
     
-GameObject.prototype.update.call(this);
+    GameObject.prototype.update.call(this);
 };

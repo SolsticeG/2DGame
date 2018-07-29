@@ -15,7 +15,7 @@ function Hero_end(spriteTexture) {
         
     this.mode=1;  
     this.mHero = new LightRenderable(spriteTexture);
-    this.mHero.setColor([0, 0, 0, 1]);  // tints red
+    this.mHero.setColor([0, 0, 0, 1]);  
     this.mHero.getXform().setPosition(50, 20);
     this.mHero.getXform().setSize(3.8, 6.5);
     this.mHero.setElementUVCoordinate(0.86, 1, 0.23, 0.48);

@@ -25,8 +25,12 @@ function End() {
     this.kCloud1="assets/cloud1.png";
     this.kStair="assets/stair.png";
     this.kStone="assets/stone.png";
-    this.kSign="assets/sign.png";
+    this.kSign="assets/endsign.png";
     this.kHeroSprite="assets/hero_sprite.png";
+    this.kGold="assets/gold.png";
+    
+    this.kEndpic = "assets/Endpic.png";
+    this.kEndpic2 = "assets/Endpic2.png";
     this.final1=0;
     
 
@@ -46,13 +50,22 @@ function End() {
     this.mStone=null;
     this.mStair=null;
     this.mSign=null;
+    this.mGold=null;
     
     
-    this.mTheLight=null;     
+    this.mTheLight=null;    
+    
+    this.Light=null;
+    this.lighthelp=0;
     this.mAllObjs = null;
     this.mNonRigid=null;    
     this.mCamera = null;
     this.state=0;
+    
+    this.isok=0;
+    this.time1=0;
+    this.time2=201;
+    this.time= new Date();
     
 }
 gEngine.Core.inheritPrototype(End, Scene);
@@ -71,6 +84,9 @@ End.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kStair);
     gEngine.Textures.loadTexture(this.kStone);
     gEngine.Textures.loadTexture(this.kSign);
+    gEngine.Textures.loadTexture(this.kEndpic);
+    gEngine.Textures.loadTexture(this.kEndpic2);
+    gEngine.Textures.loadTexture(this.kGold);
             
     gEngine.AudioClips.loadAudio(this.kBgClip2);
     gEngine.AudioClips.loadAudio(this.kBgClip3);
@@ -90,6 +106,7 @@ End.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kStair);
     gEngine.Textures.unloadTexture(this.kStone);
     gEngine.Textures.unloadTexture(this.kSign);
+    gEngine.Textures.unloadTexture(this.kGold);
 
     gEngine.AudioClips.unloadAudio(this.kBgClip2);
     gEngine.AudioClips.unloadAudio(this.kCue);
@@ -133,6 +150,7 @@ End.prototype.initialize = function () {
     this.mBallon=new Ballon(this.kBallon,10,35,5,10);
     this.mHeroend=new Hero_end(this.kHeroSprite);
     this.mHerof=new Hero_fake(this.kHeroSprite);
+    this.mGold= new Gold(this.kGold,60,30,5,5);
     this.mRoadend=new Road(this.kRoad,0,0,200,20);
     
 
@@ -152,21 +170,28 @@ End.prototype.initialize = function () {
     this.mTheLight.setYPos(20);  
     this.mTheLight.setColor([1, 1, 1, 1]);
     
+    this.Light = new Light();
+    this.Light.setNear(3);
+    this.Light.setFar(5);
+    this.Light.setZPos(2);
+    this.Light.setXPos(60);
+    this.Light.setYPos(30);  
+    this.Light.setColor([1, 1, 1, 1]);
+    
     
     
     var bgR = new LightRenderable(this.kBg);
     bgR.getXform().setSize(600, 4000);
     bgR.getXform().setPosition(0, 20);
     bgR.addLight(this.mTheLight);
+    bgR.addLight(this.Light);
     this.mBg = new GameObject(bgR);
     
     
     
     this.mHeroend.getRenderable().addLight(this.mTheLight);
     this.mBallon.getRenderable().addLight(this.mTheLight);
-     
-    var xpos=this.mHeroend.getXform().getXPos();
-    var ypos=this.mHeroend.getXform().getYPos();
+    this.mGold.getRenderable().addLight(this.Light);
         
     
     this.mAllObjs.addToSet(this.mRoadend);
@@ -185,6 +210,8 @@ End.prototype.initialize = function () {
     this.mNonRigid.addToSet(this.mCloud1);
     this.mNonRigid.addToSet(this.mCloud);
     this.mNonRigid.addToSet(this.mStair);
+    this.mNonRigid.addToSet(this.mGold);
+    
     
     
     gEngine.AudioClips.playBackgroundAudio(this.kBgClip2);
@@ -209,17 +236,9 @@ End.prototype.draw = function () {
 
 End.prototype.update = function () {
     
-    var zoomDelta = 0.5;    
+    this.lighthelp+=0.05;
     this.mCamera.update();  
-    this.mFocusObj = this.mHeroend;
 
-    // zoom
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.J)) {
-        this.mCamera.zoomTowards(this.mFocusObj.getXform().getPosition(), 1 - zoomDelta);
-    }
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.K)) {
-        this.mCamera.zoomTowards(this.mFocusObj.getXform().getPosition(), 1 + zoomDelta);
-    }
     this.mCamera.update();
     
     var xpos=this.mHeroend.getXform().getXPos();
@@ -238,6 +257,9 @@ End.prototype.update = function () {
     this.mCamera.update(); 
       
     this.mTheLight.set2DPosition(this.mHeroend.getXform().getPosition());
+    
+    this.Light.set2DPosition(this.mGold.getXform().getPosition());
+    
     this.mAllObjs.update(this.mCamera);    
     gEngine.Physics.processCollision(this.mAllObjs, []);
     this.mNonRigid.update(this.mCamera);   
@@ -314,17 +336,27 @@ End.prototype.update = function () {
         this.mBallon.getXform().setYPos(ypos+4.2); 
         this.mTheLight.setIntensity(1-this.globalcolor/3);
     }
-    console.log(this.mHerof.getXform().getPosition());
+
     
     if(this.globalcolor>3)
         
         this.globalcolor=3;
     
-    /*if(this.state && ypos>-138)
+    if(this.state && ypos>-72.1 && ypos<-71.9 &&!this.isok)
     {
-        gEngine.GameLoop.stop();       
-        
-    }*/
+        this.isok=1;
+        this.time1=this.time.getMilliseconds();
+        this.time2=this.time1;        
+    }
+    
+    
+    if(this.isok)
+        this.time2+=1;
+    
+    if(this.time2-this.time1===275)
+     {
+      gEngine.GameLoop.stop();
+   }
    
     
 };

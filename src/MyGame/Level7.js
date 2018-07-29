@@ -20,7 +20,7 @@ function Level7() {
     this.kBallon="assets/ballon.png";
     this.kStair="assets/stair.png";
     this.kStone="assets/stone.png";
-    this.kSign="assets/sign.png";
+    this.kSign="assets/xlys.png";
     this.kRoad="assets/Road.png";
     this.kCloud_t="assets/cloud_t.png";
     this.kSquare_t="assets/square_t.png";
@@ -28,6 +28,7 @@ function Level7() {
     this.kBg="assets/background.png";
     this.kSquare_h="assets/square_h.png";
     this.kPlayagain="assets/tips.png";
+    this.klevel1pic = "assets/level7pic.png";
     
     this.mState=2;
     this.boxstate=0;
@@ -37,7 +38,7 @@ function Level7() {
     this.time2=201;
     this.time= new Date();
     this.flag=false;
-    this.wait5s = 0;
+    this.wait2s = 0;
     
     this.mSquare=null;
     this.mStair1=null;
@@ -54,7 +55,8 @@ function Level7() {
     this.mCloudt=null;
     this.mSquaret=null;
     this.mPlayagain = null;
-      
+    this.mlevel1pic = null;
+    
     this.mAllObjs = null;
     this.mNonRigid=null;
     
@@ -93,7 +95,7 @@ Level7.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kSquare_t);
     gEngine.Textures.loadTexture(this.kSquare_h);
     gEngine.Textures.loadTexture(this.kPlayagain);
-            
+    gEngine.Textures.loadTexture(this.klevel1pic); 
 };
 
 Level7.prototype.unloadScene = function () {
@@ -112,11 +114,11 @@ Level7.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kSquare_t);
     gEngine.Textures.unloadTexture(this.kSquare_h);
     gEngine.Textures.unloadTexture(this.kPlayagain);
-    
+    gEngine.Textures.unloadTexture(this.klevel1pic);
     
     var nextlevel=null;
     if(this.mHero.sta===1)
-        {nextlevel=new Level7();}
+        {nextlevel=new Levelx();}
     if(this.mHero.sta===2)
         {nextlevel=new Level7();}
         
@@ -157,6 +159,7 @@ Level7.prototype.initialize = function () {
     this.mCloudt=new Cloud_t(this.kCloud_t,65,55.5,18,10.2);
     this.mSquaret=new Squaret(this.kSquare_h,45,37,4.8,4.8);
     this.mPlayagain = new Playagain(this.kPlayagain,50,40,40,20);
+    this.mlevel1pic = new Playagain(this.klevel1pic,50,40,40,20);
     this.mSquare2=new Square(this.kSquare,86.63,-37.5,5,5);
     
     this.mSquare2.setSpeed(0);
@@ -187,7 +190,6 @@ Level7.prototype.initialize = function () {
     this.mNonRigid.addToSet(this.mBallon);
     this.mNonRigid.addToSet(this.mStair);
     this.mNonRigid.addToSet(this.mStair1);
-    this.mNonRigid.addToSet(this.mPlayagain);
            
     
     
@@ -195,10 +197,7 @@ Level7.prototype.initialize = function () {
     this.mMsg.setColor([0, 0, 0, 1]);
     this.mMsg.getXform().setPosition(70, 35);
     this.mMsg.setTextHeight(2);
-    this.mMsg1 = new FontRenderable("To the End");
-    this.mMsg1.setColor([0, 0, 0, 1]);
-    this.mMsg1.getXform().setPosition(10, 55);
-    this.mMsg1.setTextHeight(2);
+  
     
     
 
@@ -217,13 +216,17 @@ Level7.prototype.draw = function () {
     this.mNonRigid.draw(this.mCamera);
     
     this.mMsg.draw(this.mCamera);  
-    this.mMsg1.draw(this.mCamera);
     
+    this.mPlayagain.draw(this.mCamera);
+    this.mlevel1pic.draw(this.mCamera);
 };
 
 
 Level7.prototype.update = function () {
-     
+    if(this.wait2s < 60)
+        this.wait2s +=1;
+    else
+        this.mlevel1pic.setVisibility(0);
      
      this.mCamera.update();
      console.log(this.time1,this.time2);
@@ -249,8 +252,9 @@ Level7.prototype.update = function () {
     if(xpos>85 && xpos<88 && ypos>=31 && ypos<=32 &&v[1]>=0)
     {
         this.mSquare2.getXform().setXPos(86.63);
-        this.mSquare2.getXform().setYPos(37.5);
+        this.mSquare2.getXform().setYPos(37);
         this.boxstate=1;
+        this.mHero.istemple=1;
     }
     
     
@@ -266,7 +270,7 @@ Level7.prototype.update = function () {
     this.mCamera.update();  
     
 
-  this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1);
+  this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1,5);
   
 
     var xsquare=this.mSquare.getXform().getXPos();
@@ -287,30 +291,15 @@ Level7.prototype.update = function () {
     
     if(this.isdead)
     {
-        if(gEngine.Input.isKeyClicked(gEngine.Input.keys.S))
-            this.wait5s = -1;
-        if(this.wait5s>=0){
-            this.mPlayagain.setVisibility(1);
-            this.wait5s = 1;
+        this.time2=this.time2+1;
+        this.mHero.mode=10;
+        this.mHero.getRigidBody().setMass(0);
+        this.mPlayagain.setVisibility(1);
+        if(gEngine.Input.isKeyClicked(gEngine.Input.keys.S)){
+            gEngine.GameLoop.stop();
+            this.mHero.sta=2;
         }
-        else{
-            this.time2=this.time2+1;
-            this.mHero.mode=10;
-            this.mHero.getRigidBody().setMass(0);
-            this.mHero.sta=2;   
-        }
-        
-        //if(this.wait5s < 300){
-        //    this.mPlayagain.setVisibility(1);
-        //    this.wait5s +=1;
-        //}
-    }
-     
-     if(this.time2-this.time1===50)
-     {
-         gEngine.GameLoop.stop();
-     }
-        
+    }  
     
     console.log("ok"+this.mSquare2.getXform().getPosition());
     

@@ -29,7 +29,7 @@ function Level2() {
     this.kHeroSprite="assets/hero_sprite.png";
     this.kBg="assets/background.png";
     this.kPlayagain="assets/tips.png";
-    this.klevel1pic="assets/level2pic.png";
+    this.klevel1pic="assets/level3pic.png";
     
     this.mState=2;
     
@@ -113,7 +113,7 @@ Level2.prototype.unloadScene = function () {
     
     var nextlevel=null;
     if(this.mHero.sta===1)
-        {nextlevel=new Level3();}
+        {nextlevel=new Levelx();}
     if(this.mHero.sta===2)
         {nextlevel=new Level2();}
         
@@ -186,7 +186,7 @@ Level2.prototype.initialize = function () {
     this.mMsg.getXform().setPosition(70, 35);
     this.mMsg.setTextHeight(2);
     
-    this.mLevelMsg = new FontRenderable("Level 2");
+    this.mLevelMsg = new FontRenderable("Level 3");
     this.mLevelMsg.setColor([0, 0, 0, 1]);
     this.mLevelMsg.getXform().setPosition(94, 58);
     this.mLevelMsg.setTextHeight(1.5);
@@ -231,7 +231,7 @@ Level2.prototype.draw = function () {
 // anything from this function!
 
 Level2.prototype.update = function () {
-    if(this.wait2s < 120)
+    if(this.wait2s < 60)
         this.wait2s +=1;
     else
         this.mlevel1pic.setVisibility(0);
@@ -260,7 +260,7 @@ Level2.prototype.update = function () {
         this.mHelpMsg.getXform().setYPos(25); 
     }
     
-    if(xpos<=65 && xpos>=57 && ypos>47 && !this.isdead) {
+    if(xpos<=73 && xpos>=57 && ypos>51 && ypos<60 && !this.isdead) {
         this.flag=true;
         this.mHero.mode=10;
         this.mHero.sta=2;
@@ -279,7 +279,7 @@ Level2.prototype.update = function () {
         this.time2=this.time1;   
     }
      
-     this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1);
+     this.mBallon.rotateObjPointTo(this.mHero.getXform().getPosition(), 1,5);
      
      
     var xsquare=this.mSquare.getXform().getXPos();

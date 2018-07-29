@@ -21,6 +21,9 @@ function Hero(spriteTexture) {
     this.mHero.getXform().setSize(3.8, 6.5);
     this.mHero.setElementUVCoordinate(0.86, 1, 0.23, 0.48);
     this.sta=2;
+    this.ishigh=0;
+    this.isair=0;
+    this.isground=1;
 
     GameObject.call(this, this.mHero);
 
@@ -146,23 +149,52 @@ Hero.prototype.update = function () {
     this.mPushHero.updateAnimation(); 
     
     var v=this.r.getVelocity();
+
     
     this.mode=1;
+    this.ishigh=0;
 
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.W) && this.jumpflag===0&&this.mode!==10) {
-        
-        v[1]=23;
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.W) && this.isground ) {  
+        v[1]=27;
         this.r.setVelocity[v];      
-        this.jumpflag =1;
+        this.isground=0;
     }
     
-
-    if (v[1]<0&&this.mode!==10) {       
-        v[1]=-22;
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.A)&&this.mode!==10) {  
+        v[0]=-10;
         this.r.setVelocity[v];
-        this.jumpflag =1;
     }
     
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.D)&&this.mode!==10) {
+        v[0]=10;
+        this.r.setVelocity[v];
+    }
+    
+    if (!this.isair && !this.isground && v[1]<0.5 && v[1]>-0.5 ) {       
+        this.r.setVelocity[v];
+        this.ishigh =1;
+    }
+    
+    if(!this.ishigh && !this.isground && v[1]<-10)
+        this.isair=1;
+    
+    if(!this.ishigh && v[1]<0.5 && v[1]>-1 )
+    {
+        this.isground=1;
+    }
+    
+    if(this.ishigh)
+    {
+        v[1]=-10;
+        this.r.setVelocity[v];
+    }
+    
+    if(this.isground)
+        this.isair=0;
+    
+    if(v[0]===0&&v[1]<0)
+        this.mode=8;
+   
     if(v[0]>0 && !(gEngine.Input.isKeyPressed(gEngine.Input.keys.D))&&this.mode!==10 )
     {
         v[0]=0;
@@ -173,23 +205,11 @@ Hero.prototype.update = function () {
         v[0]=0;
     }
 
-
-   
-    if (v[1]===0&&this.jumpflag===1&&this.mode!==10) {
+    /*if (v[1]===0 && this.jumpflag===1 && this.mode!==10) {
         this.jumpflag = 0;      
         this.r.setVelocity[v];
-    }
-
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.A)&&this.mode!==10) {
-        
-        v[0]=-8;
-        this.r.setVelocity[v];
-    }
+    }*/
     
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.D)&&this.mode!==10) {
-        v[0]=8;
-        this.r.setVelocity[v];
-    }
     
     if(v[0]>0&&v[1]===0&&this.mode!==10)
         this.mode=2;
@@ -209,19 +229,9 @@ Hero.prototype.update = function () {
      if(v[0]<0&&v[1]<0&&this.mode!==10)
     { this.mode=7;}
         
-    if(v[0]===0&&v[1]<0&&this.mode!==10)
+    if(v[0]===0&&v[1]<0&&this.mode!==10 &&!this.isground)
     { this.mode=8;}
     
-    
-    if(v[0]>0 && !(gEngine.Input.isKeyPressed(gEngine.Input.keys.D))&&this.mode!==10 )
-    {
-        v[0]=0;
-    }
-    
-    if(v[0]<0 && !(gEngine.Input.isKeyPressed(gEngine.Input.keys.A))&&this.mode!==10 )
-    {
-        v[0]=0;
-    }
     
     this.mHero.getXform().setPosition(this.getXform().getXPos(),this.getXform().getYPos());
     this.mWalkHeroRight.getXform().setPosition(this.getXform().getXPos(),this.getXform().getYPos());
@@ -235,15 +245,12 @@ Hero.prototype.update = function () {
     this.mDeadHero.getXform().setPosition(this.getXform().getXPos(),this.getXform().getYPos());
     this.mBalloonHero.getXform().setPosition(this.getXform().getXPos(),this.getXform().getYPos());
    
-    
-    
-    
-    
+  
     
     var xform = this.getXform();
     var xpos = xform.getXPos();
     var ypos = xform.getYPos();
-    console.log(xpos,ypos);
+    //console.log(xpos,ypos);
 
     
     if(xpos<=1)
@@ -258,7 +265,7 @@ Hero.prototype.update = function () {
     {
         xform.setXPos(99);
     }
-    if(xpos<=95 && xpos>=94) {
+    if(xpos<=97 && xpos>=91) {
         this.sta=1;
         gEngine.GameLoop.stop();      
         
