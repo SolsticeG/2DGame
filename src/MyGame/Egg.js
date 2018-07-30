@@ -60,7 +60,7 @@ function Egg() {
       
     this.mAllObjs = null;
     this.mNonRigid=null;
-    
+    this.mHelpMsg = null;
     
     this.mCamera = null;
     
@@ -168,7 +168,10 @@ Egg.prototype.initialize = function () {
     
     this.mPlayagain.setVisibility(0);
     
-    
+    this.mHelpMsg = new FontRenderable("jump in front of the upper right board!");
+    this.mHelpMsg.setColor([0, 0, 0, 1]);
+    this.mHelpMsg.getXform().setPosition(50, -26);
+    this.mHelpMsg.setTextHeight(2);
 
 
     this.mAllObjs.addToSet(this.mSquare);
@@ -203,6 +206,7 @@ Egg.prototype.draw = function () {
     this.mAllObjs.draw(this.mCamera);
     this.mPlayagain.draw(this.mCamera);
     this.mEndpic3.draw(this.mCamera);
+    this.mHelpMsg.draw(this.mCamera);
 
     
 };
@@ -227,16 +231,20 @@ Egg.prototype.update = function () {
     
     if(xpos> 42 && xpos<48 && ypos>31.24 && ypos<31.26 && !this.isdead)
         this.isdead=1;
-    if(xpos> 51.6 && xpos<58.4 && ypos>31.24 && ypos<31.26 && !this.isdead && v[1]>0)
+    if(xpos> 51.6 && xpos<58.4 && ypos>31.24 && ypos<31.26 && !this.isdead )
         this.isdead=1;
-    if(xpos> 61.6 && xpos<68.4 && ypos>31.24 && ypos<31.26 && !this.isdead && v[1]>0)
+    if(xpos> 61.6 && xpos<68.4 && ypos>31.24 && ypos<31.26 && !this.isdead )
         this.isdead=1;
-    if(xpos> 71.6 && xpos<78.4 && ypos>31.24 && ypos<31.26 && !this.isdead && v[1]>0)
+    if(xpos> 71.6 && xpos<78.4 && ypos>31.24 && ypos<31.26 && !this.isdead )
         this.isdead=1;
         
     if(xpos>99)
         this.mHero.getXform().setXPos(99);
     
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.H)) {
+        this.mHelpMsg.getXform().setYPos(26);
+        
+    }
     
     if(!this.isdead && xpos>75 && xpos<80 && ypos>43 && ypos<45 && v[1]>0)
     {
