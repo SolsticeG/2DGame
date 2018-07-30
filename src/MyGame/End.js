@@ -146,7 +146,7 @@ End.prototype.initialize = function () {
     this.mRoad1=new Road(this.kRoad,12+150,14-120,28,26);
     this.mRoad2=new Road(this.kRoad,70+150,14-120,65,26);
     
-    
+
     this.mBallon=new Ballon(this.kBallon,10,35,5,10);
     this.mHeroend=new Hero_end(this.kHeroSprite);
     this.mHerof=new Hero_fake(this.kHeroSprite);

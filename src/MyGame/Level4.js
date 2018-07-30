@@ -116,12 +116,14 @@ Level4.prototype.unloadScene = function () {
     
     var nextlevel=null;
     if(this.mHero.sta===1) {
-        nextlevel=new End();
+        nextlevel=new Level7();
     }
     if(this.mHero.sta===2) {
         nextlevel=new Level4();
     }
-        
+    if(this.mHero.sta===3) {
+        nextlevel=new ChooseLevel();
+    }    
     gEngine.Core.startScene(nextlevel);
     
  
@@ -142,8 +144,8 @@ Level4.prototype.initialize = function () {
     this.mNonRigid = new GameObjectSet();
     
     
-    this.mCloud=new Cloud(this.kCloud,65,55.5,16,9.14);
-    this.mCloud1=new Cloud_1(this.kCloud1,35,44,16,10);
+    this.mCloud=new Cloud(this.kCloud,65,54.5,16,9.14);
+    this.mCloud1=new Cloud_1(this.kCloud1,35,44,10,6.25);
     this.mSquare=new Square(this.kSquare,45,37,5,5);
     this.mSquare1=new Square(this.kSquare,55,47,5,5);
     this.mBallon=new Ballon(this.kBallon,10,35,5,10);
@@ -151,7 +153,7 @@ Level4.prototype.initialize = function () {
     this.mStair=new Stair(this.kStair,94,33,10,13);
     this.mStone=new Stone(this.kStone,72,35,17,17);
 
-    this.mCloudt=new Cloud_t(this.kCloud_t,65,55.5,18,10.2);
+    this.mCloudt=new Cloud_t(this.kCloud_t,65,54.5,18,10.2);
     this.mSquaret=new Squaret(this.kSquare_t,45,37,4.8,4.8);  
     this.mPlayagain = new Playagain(this.kPlayagain, 50,40,40,20);
     this.mlevel1pic = new Playagain(this.klevel1pic,50,40,40,20);
@@ -164,11 +166,21 @@ Level4.prototype.initialize = function () {
     this.mRoad1=new Road(this.kRoad,15,-19,30,92);
     this.mRoad2=new Road(this.kRoad,70,14,60,26);
     this.mRoad3=new Road(this.kRoad,100,-20,140,20);
-    this.mRoad4=new Road(this.kRoad,120,0,5,5);
-    this.mRoad5=new Road(this.kRoad,110,-7,5,5);
+    this.mRoad4=new Road(this.kRoad,128,0,5,5);
+    this.mRoad5=new Road(this.kRoad,113,-7,5,5);
     this.mRoad6=new Road(this.kRoad,110,10,5,5);
     this.mRoad7=new Road(this.kRoad,105,18,5,5);
+    this.mRoad4.setCurrentFrontDir([0,1]);
+    this.mRoad5.setCurrentFrontDir([1,0]);
+    this.mRoad6.setCurrentFrontDir([1,0]);
+
+    this.mRoad4.setSpeed(0.2);
+    this.mRoad5.setSpeed(0.2);
+    this.mRoad6.setSpeed(0.2);
+  
+
     
+  
     this.mPlayagain.setVisibility(0);
     this.mlevel1pic.setVisibility(1);
     this.mCloudt.setVisibility(0);
@@ -303,6 +315,10 @@ Level4.prototype.update = function () {
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.H)) {
         this.mHelpMsg.getXform().setYPos(25); 
     }
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.C)) {
+        this.mHero.sta=3;
+        gEngine.GameLoop.stop();
+    }
     if(xpos<=73 && xpos>=57 && ypos>51 && ypos<60 && !this.isdead) {
         this.flag=true;
         this.mHero.mode=10;
@@ -336,4 +352,33 @@ Level4.prototype.update = function () {
             this.mHero.sta=2;
         }
     }
+    
+   
+   
+   if(this.mRoad4.getXform().getYPos()>8){
+       this.mRoad4.setSpeed(-0.2);
+   }
+   if(this.mRoad4.getXform().getYPos()<-1){
+       this.mRoad4.setSpeed(0.2);
+   }
+    
+    
+   
+   if(this.mRoad5.getXform().getXPos()>121){
+       this.mRoad5.setSpeed(-0.1);
+   }
+   if(this.mRoad5.getXform().getXPos()<108){
+       this.mRoad5.setSpeed(0.1);
+   }
+    
+    
+
+   if(this.mRoad6.getXform().getXPos()>115){
+       this.mRoad6.setSpeed(-0.1);
+   }
+   if(this.mRoad6.getXform().getXPos()<108){
+       this.mRoad6.setSpeed(0.1);
+   }
+
+    
 };

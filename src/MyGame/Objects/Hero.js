@@ -150,11 +150,11 @@ Hero.prototype.update = function () {
     
     var v=this.r.getVelocity();
 
-    
+    console.log(this.isground,this.ishigh,this.isair);
     this.mode=1;
     this.ishigh=0;
 
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.W) && this.isground ) {  
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.W) && this.isground && v[1]<0.5 && v[1]>-0.5) {  
         v[1]=27;
         this.r.setVelocity[v];      
         this.isground=0;
@@ -178,7 +178,7 @@ Hero.prototype.update = function () {
     if(!this.ishigh && !this.isground && v[1]<-10)
         this.isair=1;
     
-    if(!this.ishigh && v[1]<0.5 && v[1]>-1 )
+    if(!this.ishigh && v[1]<0.5 && v[1]>-1)
     {
         this.isground=1;
     }
@@ -204,13 +204,7 @@ Hero.prototype.update = function () {
     {
         v[0]=0;
     }
-
-    /*if (v[1]===0 && this.jumpflag===1 && this.mode!==10) {
-        this.jumpflag = 0;      
-        this.r.setVelocity[v];
-    }*/
-    
-    
+        
     if(v[0]>0&&v[1]===0&&this.mode!==10)
         this.mode=2;
     

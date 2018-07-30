@@ -31,16 +31,16 @@ function Level6() {
     this.kPlatformTexture = "assets/platform.png";
     this.kWallTexture = "assets/wall.png";
     this.kTargetTexture = "assets/target.png";
-    this.kSquare="assets/box.png";
+    this.kSquare="assets/rock.png";
     this.kCloud="assets/cloud.png";
     this.kCloud1="assets/cloud1.png";
     this.kBallon="assets/ballon.png";
     this.kStair="assets/stair.png";
     this.kStone="assets/stone.png";
-    this.kSign="assets/rcyz.png";
+    this.kSign="assets/gznm.png";
     this.kRoad="assets/Road.png";
     this.kCloud_t="assets/cloud_t.png";
-    this.kSquare_t="assets/square_h.png";
+    this.kSquare_t="assets/paper.png";
     this.kHeroSprite="assets/hero_sprite.png";
     this.kBg="assets/background.png";
     this.kPlayagain="assets/tips.png";
@@ -136,7 +136,8 @@ Level6.prototype.unloadScene = function () {
     if(this.mHero.sta===2) {
         nextlevel=new Level6();
     }
-        
+    if(this.mHero.sta===3)
+        {nextlevel=new ChooseLevel();}    
     gEngine.Core.startScene(nextlevel);
     
     
@@ -157,16 +158,16 @@ Level6.prototype.initialize = function () {
     this.mNonRigid = new GameObjectSet();
     
     
-    this.mCloud=new Cloud(this.kCloud,65,55.5,16,9.14);
-    this.mCloud1=new Cloud_1(this.kCloud1,35,44,16,10);
-    this.mSquare=new Square(this.kSquare,45,37,5,5);
-    this.mSquare1=new Square(this.kSquare,55,47,5,5);
+    this.mCloud=new Cloud(this.kCloud,65,54.5,16,9.14);
+    this.mCloud1=new Cloud_1(this.kCloud1,35,44,10,6.25);
+    this.mSquare=new Squaret(this.kSquare_t,45,37,5,5);
+    this.mSquare1=new Squaret(this.kSquare,55,47,5,5);
     this.mBallon=new Ballon(this.kBallon,10,35,5,10);
     this.mSign=new Sign(this.kSign,15,55,24,8);
     this.mStair=new Stair(this.kStair,94,33,10,13);
     this.mStone=new Stone(this.kStone,72,34,17,17);
 
-    this.mCloudt=new Cloud_t(this.kCloud_t,65,55.5,18,10.2);
+    this.mCloudt=new Cloud_t(this.kCloud_t,65,54.5,18,10.2);
     this.mSquaret=new Squaret(this.kSquare_t,45,37,4.8,4.8);  
     this.mSquaret1 = new Squaret(this.kSquare_t,55,47,4.8,4.8);
     this.mPlayagain = new Playagain(this.kPlayagain,50,40,40,20);
@@ -231,7 +232,7 @@ Level6.prototype.initialize = function () {
     this.mLevelMsg.getXform().setPosition(94, 58);
     this.mLevelMsg.setTextHeight(1.5);
     
-    this.mHelpMsg = new FontRenderable("?? -> !!");
+    this.mHelpMsg = new FontRenderable("stand on the upper block and follow it");
     this.mHelpMsg.setColor([0, 0, 0, 1]);
     this.mHelpMsg.getXform().setPosition(50, -26);
     this.mHelpMsg.setTextHeight(2);
@@ -312,6 +313,10 @@ Level6.prototype.update = function () {
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.H)) {
         this.mHelpMsg.getXform().setYPos(25); 
     }
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.C)) {
+        this.mHero.sta=3;
+        gEngine.GameLoop.stop();
+    }
     if(xpos<=73 && xpos>=57 && ypos>51 && ypos<60 && !this.isdead) {
         this.flag=true;
         this.mHero.mode=10;
@@ -334,10 +339,9 @@ Level6.prototype.update = function () {
         this.mSquare.getXform().setYPos(-100);
         this.mSquaret.setVisibility(1);
         this.mSquaret.isfinal = 2;
-        this.ischange = 1;
         
     }
-    if(xpos>xsquare1-2 && xpos<xsquare1+2 && ypos === 41.25 &&this.ischange){
+    if(xpos>xsquare1-2 && xpos<xsquare1+2 && ypos === 41.25 ){
         this.boxstate1 = 1;
         this.mSquare1.setVisibility(!this.boxstate1);
         this.mSquare1.getXform().setYPos(-100);

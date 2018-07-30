@@ -147,7 +147,7 @@ Hero1.prototype.update = function () {
      this.mode=1;
     this.ishigh=0;
 
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.W) && this.isground ) {  
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.W) && this.isground && v[1]<0.5 && v[1]>-0.5) {  
         v[1]=27;
         this.r.setVelocity[v];      
         this.isground=0;

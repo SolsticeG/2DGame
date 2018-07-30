@@ -115,6 +115,8 @@ Level3.prototype.unloadScene = function () {
         {nextlevel=new Level5();}
     if(this.mHero.sta===2)
         {nextlevel=new Level3();}
+    if(this.mHero.sta===3)
+        {nextlevel=new ChooseLevel();}
         
     gEngine.Core.startScene(nextlevel);
     
@@ -137,8 +139,8 @@ Level3.prototype.initialize = function () {
     
     //this.createBounds();    
     
-    this.mCloud=new Cloud(this.kCloud,65,55.5,16,9.14);
-    this.mCloud1=new Cloud_1(this.kCloud1,35,44,16,10);
+    this.mCloud=new Cloud(this.kCloud,65,54.5,16,9.14);
+    this.mCloud1=new Cloud_1(this.kCloud1,35,44,10,6.25);
     this.mSquare=new Square(this.kSquare,45,37,5,5);
     this.mSquare1=new Square(this.kSquare,55,47,5,5);
     this.mBallon=new Ballon(this.kBallon,10,35,5,10);
@@ -148,7 +150,7 @@ Level3.prototype.initialize = function () {
     this.mHero=new Hero(this.kHeroSprite);
     this.mRoad1=new Road(this.kRoad,12,14,28,26);
     this.mRoad2=new Road(this.kRoad,70,14,65,26);
-    this.mCloudt=new Cloud_t(this.kCloud_t,65,55.5,18,10.2);
+    this.mCloudt=new Cloud_t(this.kCloud_t,65,54.5,18,10.2);
     this.mSquaret=new Squaret(this.kSquare_t,45,37,4.8,4.8);
     this.mPlayagain = new Playagain(this.kPlayagain, 50,40,40,20);
     this.mlevel1pic = new Playagain(this.klevel1pic,50,40,40,20);
@@ -282,6 +284,10 @@ Level3.prototype.update = function () {
     
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.H)) {
         this.mHelpMsg.getXform().setYPos(25); 
+    }
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.C)) {
+        this.mHero.sta=3;
+        gEngine.GameLoop.stop();
     }
     var xform = this.mHero.getXform();
     var xpos = xform.getXPos();

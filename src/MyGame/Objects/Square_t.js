@@ -61,11 +61,10 @@ Squaret.prototype.update = function () {
     }
     if(this.isfinal===3){
         
-        //this.setSpeed(-0.13);
-        if(xpos<3)
-            this.setSpeed(0.13);
-        if(xpos>97)
-            this.setSpeed(-0.13);
+        this.setSpeed(-0.13);
+        if(xpos<1)
+            this.getXform().setXPos(99);
+        
         
     }
 

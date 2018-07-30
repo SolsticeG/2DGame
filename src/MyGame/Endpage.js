@@ -20,7 +20,8 @@ function Endpage() {
        
     this.kEndpic = "assets/Endpic.png";
     this.kEndpic2 = "assets/Endpic2.png";
-    //this.kEndpic3 = "assets/credit.png";
+    this.kEndpic3 = "assets/credit.png";
+    this.kCue = "assets/sounds/cue1.mp3"; 
     
     this.mState=2;
     this.flag=false;
@@ -42,16 +43,17 @@ function Endpage() {
 gEngine.Core.inheritPrototype(Endpage, Scene);
 
 Endpage.prototype.loadScene = function () {
-    //gEngine.Textures.loadTexture(this.kEndpic3);
+    gEngine.Textures.loadTexture(this.kEndpic3);
 };
 
 Endpage.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kEndpic);
     gEngine.Textures.unloadTexture(this.kEndpic2);
-    //gEngine.Textures.unloadTexture(this.kEndpic3);
+    
+    gEngine.AudioClips.unloadAudio(this.kCue);
  
     
-    var nextlevel=null;
+    var nextlevel= new Egg();
     gEngine.Core.startScene(nextlevel);
     
 };
@@ -73,11 +75,11 @@ Endpage.prototype.initialize = function () {
     this.mEndpic = new Endpic(this.kEndpic,50,40,100,50);//////////
     
     this.mEndpic2 = new Endpic(this.kEndpic2,50,40,100,50);
-    //this.mEndpic3 = new Endpic(this.kEndpic3,50,40,100,50);
+
     
     this.mEndpic.setVisibility(1);
     this.mEndpic2.setVisibility(0);
-    //this.mEndpic3.setVisibility(0);
+    
     
 
 };
@@ -99,7 +101,6 @@ Endpage.prototype.draw = function () {
     //this.mNonRigid.draw(this.mCamera);
     this.mEndpic.draw(this.mCamera);
     this.mEndpic2.draw(this.mCamera);
-    this.mEndpic3.draw(this.mCamera);
     
     //this.mMsg.draw(this.mCamera);
     
@@ -116,8 +117,13 @@ Endpage.prototype.update = function () {
        this.mEndpic.setVisibility(0);
        this.mEndpic2.setVisibility(1);
     }
-    /*if(this.count===1000){
-        this.mEndpic2.setVisibility(0);
-        this.mEndpic3.setVisibility(1);
-    }*/
+    
+    
+    if(this.count===849){
+        gEngine.AudioClips.stopBackgroundAudio();
+    }
+    
+    if(this.count===850){
+        gEngine.GameLoop.stop();
+    }
 };

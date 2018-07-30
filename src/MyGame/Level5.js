@@ -141,7 +141,8 @@ Level5.prototype.unloadScene = function () {
         {nextlevel=new Level4();}
     if(this.mHero.sta===2)
         {nextlevel=new Level5();}
-        
+    if(this.mHero.sta===3)
+        {nextlevel=new ChooseLevel();}    
     gEngine.Core.startScene(nextlevel);
     
     
@@ -190,7 +191,7 @@ Level5.prototype.initialize = function () {
     
     
     
-    this.mCloud=new Cloud(this.kCloud,65,55.5,16,9.14);
+    this.mCloud=new Cloud(this.kCloud,65,54.5,16,9.14);
     this.mCloud1=new Cloud_1(this.kCloud1,35,44,10,6.25);
     this.mSquare=new Square(this.kSquare,45,37,5,5);
     this.mSquare1=new Square(this.kSquare,55,48,5,5);
@@ -202,7 +203,7 @@ Level5.prototype.initialize = function () {
     
     this.mRoad1=new Road(this.kRoad,12,14,28,26);
     this.mRoad2=new Road(this.kRoad,70,14,65,26);
-    this.mCloudt=new Cloud_t(this.kCloud_t,65,55.5,18,10.2);
+    this.mCloudt=new Cloud_t(this.kCloud_t,65,54.5,18,10.2);
     this.mSquaret=new Squaret(this.kSquare_t,45,37,4.8,4.8);
     this.mSquaret.getRenderable().setElementUVCoordinate(0.15, 0.85,0.1,0.9);
     this.mPlayagain = new Playagain(this.kPlayagain, 50,40,40,20);
@@ -435,7 +436,10 @@ Level5.prototype.update = function () {
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.H)) {
         this.mHelpMsg.getXform().setYPos(26);   
     }
-    
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.C)) {
+        this.mHero.sta=3;
+        gEngine.GameLoop.stop();
+    }
     if(this.heightstate)
         this.mCamera.panWith(this.mHero.getXform(), 0.9);
         

@@ -19,6 +19,8 @@
 function Startpage() {
        
     this.kBgClip = "assets/sounds/BGClip.mp3";
+    this.kBgClip1 = "assets/sounds/story.mp3";
+    
     
     this.kPlatformTexture = "assets/platform.png";
     this.kWallTexture = "assets/wall.png";
@@ -69,50 +71,22 @@ gEngine.Core.inheritPrototype(Startpage, Scene);
 
 Startpage.prototype.loadScene = function () {
     gEngine.AudioClips.loadAudio(this.kBgClip);
+    gEngine.AudioClips.loadAudio(this.kBgClip1);
     
     gEngine.Textures.loadTexture(this.kstartpic);
-    /*
-    gEngine.Textures.loadTexture(this.kPlatformTexture);
-    gEngine.Textures.loadTexture(this.kWallTexture);
-    gEngine.Textures.loadTexture(this.kTargetTexture);
-    gEngine.Textures.loadTexture(this.kSquare);
-    gEngine.Textures.loadTexture(this.kCloud);
-    gEngine.Textures.loadTexture(this.kCloud1);
-    gEngine.Textures.loadTexture(this.kBallon);
-    gEngine.Textures.loadTexture(this.kStair);
-    gEngine.Textures.loadTexture(this.kStone);
-    gEngine.Textures.loadTexture(this.kSign);
-    gEngine.Textures.loadTexture(this.kHeroSprite);
-    gEngine.Textures.loadTexture(this.kRoad);
-    gEngine.Textures.loadTexture(this.kCloud_t);
-    gEngine.Textures.loadTexture(this.kSquare_t);
-     */
+    
+
             
 };
 
 Startpage.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kstartpic);
-    /*
-    gEngine.Textures.unloadTexture(this.kPlatformTexture);
-    gEngine.Textures.unloadTexture(this.kWallTexture);
-    gEngine.Textures.unloadTexture(this.kTargetTexture);
-    gEngine.Textures.unloadTexture(this.kSquare);
-    gEngine.Textures.unloadTexture(this.kCloud);
-    gEngine.Textures.unloadTexture(this.kCloud1);
-    gEngine.Textures.unloadTexture(this.kBallon);
-    gEngine.Textures.unloadTexture(this.kStair);
-    gEngine.Textures.unloadTexture(this.kStone);
-    gEngine.Textures.unloadTexture(this.kSign);
-    gEngine.Textures.unloadTexture(this.kHeroSprite);
-    gEngine.Textures.unloadTexture(this.kRoad);
-    gEngine.Textures.unloadTexture(this.kCloud_t);
-    gEngine.Textures.unloadTexture(this.kSquare_t); 
-     */
+
     
     var nextlevel=null;
     if(gEngine.Input.isKeyClicked(gEngine.Input.keys.S))
     {    
-        nextlevel=new MyGame();
+        nextlevel=new Story();
     }
             
     gEngine.Core.startScene(nextlevel);
@@ -133,50 +107,12 @@ Startpage.prototype.initialize = function () {
     //this.mAllObjs = new GameObjectSet();
     //this.mNonRigid = new GameObjectSet();
     
-    this.mstartpic = new startpic(this.kstartpic,50,40,100,50);//////////
+    this.mstartpic = new startpic(this.kstartpic,50,40,100,50);
     
-    //this.mAllObjs.addToSet(this.mstartpic);
-    /*
-    //this.createBounds();    
-    
-    this.mCloud=new Cloud(this.kCloud,65,57,16,9.14);
-    this.mCloud1=new Cloud_1(this.kCloud1,35,44,10,6.25);
-    this.mSquare=new Square(this.kSquare,45,37,5,5);
-    this.mSquare1=new Square(this.kSquare,55,47,5,5);
-    this.mBallon=new Ballon(this.kBallon,10,35,5,10);
-    this.mSign=new Sign(this.kSign,15,55,24,8);
-    this.mStair=new Stair(this.kStair,94,33,10,13);
-    this.mStone=new Stone(this.kStone,72,35,17,17);
-    this.mHero=new Hero(this.kHeroSprite);
-    this.mRoad1=new Road(this.kRoad,12,14,28,26);
-    this.mRoad2=new Road(this.kRoad,70,14,65,26);
-    this.mCloudt=new Cloud_t(this.kCloud_t,65,57,18,10.2);
-    this.mSquaret=new Square_t(this.kSquare_t,54,35,5.8,5.8);
-    
-    this.mCloudt.setVisibility(0);
-    
-    this.mAllObjs.addToSet(this.mStone);
-    this.mAllObjs.addToSet(this.mSquare);
-    this.mAllObjs.addToSet(this.mSquare1);
-    this.mAllObjs.addToSet(this.mRoad1);
-    this.mAllObjs.addToSet(this.mRoad2);
-    this.mAllObjs.addToSet(this.mHero);
-
-    
-    this.mNonRigid.addToSet(this.mSign);
-    this.mNonRigid.addToSet(this.mCloud1);
-    this.mNonRigid.addToSet(this.mCloudt);
-    this.mNonRigid.addToSet(this.mCloud);
-    this.mNonRigid.addToSet(this.mBallon);
-    this.mNonRigid.addToSet(this.mStair);
+    gEngine.AudioClips.playBackgroundAudio(this.kBgClip1);
     
     
-    this.mMsg = new FontRenderable("Heavy");
-    this.mMsg.setColor([0, 0, 0, 1]);
-    this.mMsg.getXform().setPosition(70, 35);
-    this.mMsg.setTextHeight(2);
-     */ 
-    gEngine.AudioClips.playBackgroundAudio(this.kBgClip);
+    
 };
 
 // This is the draw function, make sure to setup proper drawing environment, and more

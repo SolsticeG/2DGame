@@ -20,6 +20,9 @@ function Egg() {
     this.kHeroSprite="assets/hero_sprite.png";
     this.kBg="assets/background.png";
     this.kPlayagain="assets/tips.png";
+    this.kEndpic3 = "assets/credit.png";
+    this.kBg="assets/sounds/egg.mp3";
+    
     
     this.kA="assets/a.png";
     this.kB="assets/b.png";
@@ -27,6 +30,7 @@ function Egg() {
     this.kD="assets/d.png";
     this.kSs1="assets/ss1.png";
     this.kSs2="assets/ss2.png";
+    this.kSs2r="assets/ss2r.png";
     
     this.mState=2;
     this.isdead=0;
@@ -34,7 +38,8 @@ function Egg() {
     this.time2=201;
     this.time= new Date();
     this.flag=false;
-    this.wait5s = 0;
+    this.reallyfinal=0;
+    this.count=0;
     
     this.mSquare=null;
     this.mSquare1=null;
@@ -46,6 +51,7 @@ function Egg() {
 
     this.mSign=null;
     this.mSign2=null;
+    this.mSign3=null;
     
     this.mHero = null;
     this.mBg=null;
@@ -75,7 +81,9 @@ Egg.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kD);
     gEngine.Textures.loadTexture(this.kSs1);
     gEngine.Textures.loadTexture(this.kSs2);
+    gEngine.Textures.loadTexture(this.kSs2r);
     
+    gEngine.AudioClips.loadAudio(this.kBg);
     
             
 };
@@ -94,8 +102,9 @@ Egg.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kD);
     gEngine.Textures.unloadTexture(this.kSs1);
     gEngine.Textures.unloadTexture(this.kSs2);
-
-    nextlevel=new Egg();        
+    gEngine.Textures.unloadTexture(this.kSs2r);
+    
+    var nextlevel=new Egg();        
     gEngine.Core.startScene(nextlevel);
     
     
@@ -111,6 +120,7 @@ Egg.prototype.initialize = function () {
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
             // sets the background to gray
     gEngine.DefaultResources.setGlobalAmbientIntensity(3);
+    gEngine.AudioClips.playBackgroundAudio(this.kBg);
       
     this.mAllObjs = new GameObjectSet();
     this.mNonRigid = new GameObjectSet();
@@ -120,6 +130,9 @@ Egg.prototype.initialize = function () {
     this.mSquare1=new Squaret(this.kB,55,37,5,5);
     this.mSquare2=new Squaret(this.kC,65,37,5,5);
     this.mSquare3=new Squaret(this.kD,75,37,5,5);
+    
+    this.mEndpic3 = new Endpic(this.kEndpic3,50,40,100,50);
+    this.mEndpic3.setVisibility(0);
     
     this.mSquare.isfinal=0;
     this.mSquare.setSpeed(0);
@@ -135,13 +148,21 @@ Egg.prototype.initialize = function () {
     
     this.mSign=new Sign(this.kSs1,17,50,40,25);
     this.mSign2=new Sign(this.kSs2,77,50,40,25);
+    this.mSign3=new Sign(this.kSs2r,77,50,40,25);
+    
+    
     
     this.mSign.getRenderable().setElementUVCoordinate(0, 1,0,1);
     this.mSign2.getRenderable().setElementUVCoordinate(0, 1,0,1);
+    this.mSign3.getRenderable().setElementUVCoordinate(0, 1,0,1);
+    
+    this.mSign3.setVisibility(0);
     
     this.mHero=new Hero(this.kHeroSprite);
     this.mRoad1=new Road(this.kRoad,12,14,28,26);
     this.mRoad2=new Road(this.kRoad,70,14,65,26);
+    
+    this.mHero.isfake=1;
 
     this.mPlayagain = new Playagain(this.kPlayagain,50,40,40,20);
     
@@ -163,8 +184,7 @@ Egg.prototype.initialize = function () {
     
     this.mNonRigid.addToSet(this.mSign);
     this.mNonRigid.addToSet(this.mSign2);
-
-    this.mNonRigid.addToSet(this.mPlayagain);
+    this.mNonRigid.addToSet(this.mSign3);
            
    
 
@@ -181,7 +201,8 @@ Egg.prototype.draw = function () {
     
     this.mNonRigid.draw(this.mCamera);
     this.mAllObjs.draw(this.mCamera);
-    
+    this.mPlayagain.draw(this.mCamera);
+    this.mEndpic3.draw(this.mCamera);
 
     
 };
@@ -196,34 +217,46 @@ Egg.prototype.update = function () {
     var xform = this.mHero.getXform();
     var xpos = xform.getXPos();
     var ypos = xform.getYPos();
-    
+    var v=this.mHero.getRigidBody().getVelocity();
     console.log(xpos,ypos);
+    if(ypos<20 &!this.isdead)
+        this.isdead=1;
     
-    if(xpos> 41 && xpos<49 && ypos>31.24 && ypos<31.26 && !this.isdead)
+    if(this.reallyfinal)
+        this.count+=1;
+    
+    if(xpos> 42 && xpos<48 && ypos>31.24 && ypos<31.26 && !this.isdead)
         this.isdead=1;
-    if(xpos> 51 && xpos<59 && ypos>31.24 && ypos<31.26 && !this.isdead)
+    if(xpos> 51.6 && xpos<58.4 && ypos>31.24 && ypos<31.26 && !this.isdead && v[1]>0)
         this.isdead=1;
-    if(xpos> 61 && xpos<69 && ypos>31.24 && ypos<31.26 && !this.isdead)
+    if(xpos> 61.6 && xpos<68.4 && ypos>31.24 && ypos<31.26 && !this.isdead && v[1]>0)
         this.isdead=1;
-    if(xpos> 71 && xpos<79 && ypos>31.24 && ypos<31.26 && !this.isdead)
+    if(xpos> 71.6 && xpos<78.4 && ypos>31.24 && ypos<31.26 && !this.isdead && v[1]>0)
         this.isdead=1;
         
-    if(xpos>75 && xpos<80 && ypos>43)
-        ;
+    if(xpos>99)
+        this.mHero.getXform().setXPos(99);
     
-    if(this.isdead)
+    
+    if(!this.isdead && xpos>75 && xpos<80 && ypos>43 && ypos<45 && v[1]>0)
     {
-        if(gEngine.Input.isKeyClicked(gEngine.Input.keys.S))
-            this.wait5s = -1;
-        if(this.wait5s>=0){
-            this.mPlayagain.setVisibility(1);
-            this.wait5s = 1;
+        this.mSign3.setVisibility(1);
+        this.reallyfinal=1;
+    }
+    
+    if(this.count>120)
+        this.mEndpic3.setVisibility(1);
+    
+     if(this.isdead)
+    {
+        this.mHero.setMode(10);
+        this.mHero.getRigidBody().setMass(0);
+        this.mPlayagain.setVisibility(1);
+        
+        if(gEngine.Input.isKeyClicked(gEngine.Input.keys.S)){
+            gEngine.GameLoop.stop();
         }
-        else{
-            this.time2=this.time2+1;
-            this.mHero.setMode(10);
-            this.mHero.sta=2;   
-        }
+        
     }
 
     

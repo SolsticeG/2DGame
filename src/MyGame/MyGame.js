@@ -31,6 +31,8 @@ function MyGame() {
     this.kSquare_h="assets/square_h.png";
     this.kPlayagain="assets/tips.png";
     
+    this.kBgClip = "assets/sounds/BGClip.mp3";
+    
     this.mState=2;
     this.isdead=0;
     this.time1=0;
@@ -61,7 +63,7 @@ function MyGame() {
     this.mCamera = null;
     
     this.mMsg = null;
-    this.mMsg1 = null;
+    
     this.mMsg2 = null;
     this.mMsg3 = null;
     this.mMsg4 = null;
@@ -119,7 +121,7 @@ MyGame.prototype.unloadScene = function () {
     
     var nextlevel=null;
     if(this.mHero.sta===1)
-        {nextlevel=new Level1();}
+        {nextlevel=new ChooseLevel();}
     if(this.mHero.sta===2)
         {nextlevel=new MyGame();}
         
@@ -138,6 +140,7 @@ MyGame.prototype.initialize = function () {
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
             // sets the background to gray
     gEngine.DefaultResources.setGlobalAmbientIntensity(3);
+    gEngine.AudioClips.playBackgroundAudio(this.kBgClip);
       
     this.mAllObjs = new GameObjectSet();
     this.mNonRigid = new GameObjectSet();
@@ -145,7 +148,7 @@ MyGame.prototype.initialize = function () {
     
     //this.createBounds();    
     
-    this.mCloud=new Cloud(this.kCloud,65,55.5,16,9.14);
+    this.mCloud=new Cloud(this.kCloud,65,54.5,16,9.14);
     this.mCloud1=new Cloud_1(this.kCloud1,35,44,10,6.25);
     this.mSquare=new Square(this.kSquare,45,37,5,5);
     this.mSquare1=new Square(this.kSquare,55,47,5,5);
@@ -159,6 +162,8 @@ MyGame.prototype.initialize = function () {
     this.mCloudt=new Cloud_t(this.kCloud_t,65,55.5,18,10.2);
     this.mSquaret=new Squaret(this.kSquare_h,45,37,4.8,4.8);
     this.mPlayagain = new Playagain(this.kPlayagain,50,40,40,20);
+    
+   
     
     this.mCloudt.setVisibility(0);
     this.mSquaret.setVisibility(0);
@@ -189,13 +194,9 @@ MyGame.prototype.initialize = function () {
     this.mMsg.setColor([0, 0, 0, 1]);
     this.mMsg.getXform().setPosition(70, 35);
     this.mMsg.setTextHeight(2);
-    this.mMsg1 = new FontRenderable("To the End");
-    this.mMsg1.setColor([0, 0, 0, 1]);
-    this.mMsg1.getXform().setPosition(10, 55);
-    this.mMsg1.setTextHeight(2);
     
-    this.mMsg2 = new FontRenderable("W,A,D to move");
-    this.mMsg2.setColor([0, 0, 0, 1]);
+    this.mMsg2 = new FontRenderable("use WAD to move");
+    this.mMsg2.setColor([0, 0, 0.5, 1]);
     this.mMsg2.getXform().setPosition(50, 26);
     this.mMsg2.setTextHeight(2);
     
@@ -205,12 +206,12 @@ MyGame.prototype.initialize = function () {
     this.mMsg3.setTextHeight(2);
     
     this.mMsg4 = new FontRenderable("H for hint, yet try not to use that");
-    this.mMsg4.setColor([1, 0, 0, 1]);
+    this.mMsg4.setColor([0, 0, 0.5, 1]);
     this.mMsg4.getXform().setPosition(50, 22);
     this.mMsg4.setTextHeight(2);
     
     this.mMsg5 = new FontRenderable("MouseLeft pressed to move objects");
-    this.mMsg5.setColor([1, 0, 0, 1]);
+    this.mMsg5.setColor([0, 0, 0.5, 1]);
     this.mMsg5.getXform().setPosition(50, 24);
     this.mMsg5.setTextHeight(2);
     
@@ -219,6 +220,7 @@ MyGame.prototype.initialize = function () {
     this.mMsg6.getXform().setPosition(94, 58);
     this.mMsg6.setTextHeight(1.5);
     
+    gEngine.AudioClips.playBackgroundAudio(this.kBgClip);
 
 };
 
@@ -237,7 +239,7 @@ MyGame.prototype.draw = function () {
     this.mMsg.draw(this.mCamera);
     
     this.mMsg.draw(this.mCamera);  
-    this.mMsg1.draw(this.mCamera);
+    
     this.mMsg2.draw(this.mCamera);
     this.mMsg3.draw(this.mCamera);
     this.mMsg4.draw(this.mCamera);
