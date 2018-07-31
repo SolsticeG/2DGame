@@ -231,11 +231,11 @@ Egg.prototype.update = function () {
     
     if(xpos> 42 && xpos<48 && ypos>31.24 && ypos<31.26 && !this.isdead)
         this.isdead=1;
-    if(xpos> 51.6 && xpos<58.4 && ypos>31.24 && ypos<31.26 && !this.isdead )
+    if(xpos> 52 && xpos<58 && ypos>31.24 && ypos<31.26 && !this.isdead )
         this.isdead=1;
-    if(xpos> 61.6 && xpos<68.4 && ypos>31.24 && ypos<31.26 && !this.isdead )
+    if(xpos> 62 && xpos<68 && ypos>31.24 && ypos<31.26 && !this.isdead )
         this.isdead=1;
-    if(xpos> 71.6 && xpos<78.4 && ypos>31.24 && ypos<31.26 && !this.isdead )
+    if(xpos> 72 && xpos<78 && ypos>31.24 && ypos<31.26 && !this.isdead )
         this.isdead=1;
         
     if(xpos>99)
